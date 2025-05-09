@@ -23,7 +23,7 @@ public class FirebaseConfig {
                     .build();
 
             FirebaseApp.initializeApp(options);
-            System.out.println("Firebase App initialized successfully.");
+            log.info("Firebase App initialized successfully.");
         } catch (Exception e) {
             log.error("Firebase App initialization failed.\n Error: {}", e.getMessage());
         }
