@@ -10,6 +10,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.HandlerInterceptor;
 import org.xxooooxx.nestledger.exception.CustomException;
 import org.xxooooxx.nestledger.exception.CustomExceptionEnum;
+import org.xxooooxx.nestledger.utility.UserContext;
 
 import java.util.Set;
 
@@ -29,8 +30,8 @@ public class FirebaseAuthenticationInterceptor implements HandlerInterceptor {
             String token = authHeader.substring(7);
             try {
                 FirebaseToken decodedToken = FirebaseAuth.getInstance().verifyIdToken(token);
-                // TODO: Save user id to request attribute
                 String uid = decodedToken.getUid();
+                UserContext.setUid(uid);
                 System.out.println("User ID: " + uid);
                 log.info("User ID: " + uid + " authenticated successfully.");
                 return true;
@@ -40,5 +41,10 @@ public class FirebaseAuthenticationInterceptor implements HandlerInterceptor {
         } else {
             throw new CustomException(CustomExceptionEnum.ACCOUNT_AUTHENTICATION_FAILED);
         }
+    }
+
+    @Override
+    public void afterCompletion(HttpServletRequest request, HttpServletResponse response, Object handler, Exception ex) throws Exception {
+        UserContext.clear();
     }
 }

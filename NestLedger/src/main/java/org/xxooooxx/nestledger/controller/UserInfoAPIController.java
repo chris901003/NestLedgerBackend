@@ -1,0 +1,33 @@
+/*
+ * =============================================================================
+ * Created by Zephyr-Huang on 2025/5/12.
+ * Copyright © 2025 Zephyr-Huang. All rights reserved.
+ *
+ * Unauthorized copying of this file, via any medium, is strictly prohibited.
+ * Proprietary and confidential.
+ * =============================================================================
+ */
+package org.xxooooxx.nestledger.controller;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+import org.xxooooxx.nestledger.common.Response;
+import org.xxooooxx.nestledger.service.userinfo.interfaces.UserInfoService;
+import org.xxooooxx.nestledger.utility.UserContext;
+import org.xxooooxx.nestledger.vo.userinfo.response.UserInfoGetResponse;
+
+@RestController
+@RequestMapping("/user")
+public class UserInfoAPIController {
+
+    @Autowired
+    private UserInfoService userInfoService;
+
+    @GetMapping("/get")
+    public Response<UserInfoGetResponse> getUserInfo() {
+        String uid = UserContext.getUid();
+        return Response.success(userInfoService.getUserInfoById(uid));
+    }
+}
