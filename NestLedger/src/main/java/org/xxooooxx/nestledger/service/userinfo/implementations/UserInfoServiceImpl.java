@@ -12,9 +12,11 @@ package org.xxooooxx.nestledger.service.userinfo.implementations;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.xxooooxx.nestledger.dao.ledger.interfaces.LedgerDao;
 import org.xxooooxx.nestledger.dao.userinfo.interfaces.UserInfoDao;
 import org.xxooooxx.nestledger.service.userinfo.interfaces.UserInfoService;
 import org.xxooooxx.nestledger.to.UserInfoDB;
+import org.xxooooxx.nestledger.vo.ledger.request.LedgerCreate;
 import org.xxooooxx.nestledger.vo.userinfo.response.UserInfoGetResponse;
 
 @Slf4j
@@ -23,6 +25,9 @@ public class UserInfoServiceImpl implements UserInfoService {
 
     @Autowired
     private UserInfoDao userInfoDao;
+
+    @Autowired
+    private LedgerDao ledgerDao;
 
     @Override
     public UserInfoGetResponse createUserInfoIfNeeded(String id) {
@@ -33,6 +38,13 @@ public class UserInfoServiceImpl implements UserInfoService {
         } else {
             log.info("Creating new user info: {}", id);
             UserInfoDB newUserInfo = createUserInfo(id);
+
+            // Create main ledger
+            LedgerCreate ledgerCreate = new LedgerCreate();
+            ledgerCreate.setTitle("[Main]:" + id);
+            ledgerCreate.setUserId(id);
+            ledgerCreate.setVersion(1);
+            ledgerDao.createLedger(ledgerCreate);
             return new UserInfoGetResponse(newUserInfo);
         }
     }
