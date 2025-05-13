@@ -25,6 +25,12 @@ public class UserInfoAPIController {
     @Autowired
     private UserInfoService userInfoService;
 
+    @GetMapping("/login")
+    public Response<UserInfoGetResponse> login() {
+        String uid = UserContext.getUid();
+        return Response.success(userInfoService.createUserInfoIfNeeded(uid));
+    }
+
     @GetMapping("/get")
     public Response<UserInfoGetResponse> getUserInfo() {
         String uid = UserContext.getUid();

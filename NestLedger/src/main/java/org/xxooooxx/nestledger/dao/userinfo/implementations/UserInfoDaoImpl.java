@@ -32,6 +32,12 @@ public class UserInfoDaoImpl implements UserInfoDao {
 
     @Override
     public UserInfoDB createUserInfo(String id) {
-        return null;
+        UserInfoDB userInfoDB = new UserInfoDB();
+        userInfoDB.setId(id);
+        userInfoDB.setTimeZone(8);
+        userInfoDB.setImageQuality(1.0);
+        userInfoDB.setIsDelete(false);
+        userInfoDB.setVersion(1);
+        return mongoTemplate.insert(userInfoDB);
     }
 }

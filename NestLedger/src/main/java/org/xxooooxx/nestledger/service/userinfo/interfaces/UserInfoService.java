@@ -12,5 +12,6 @@ package org.xxooooxx.nestledger.service.userinfo.interfaces;
 import org.xxooooxx.nestledger.vo.userinfo.response.UserInfoGetResponse;
 
 public interface UserInfoService {
+    UserInfoGetResponse createUserInfoIfNeeded(String id);
     UserInfoGetResponse getUserInfoById(String id);
 }
