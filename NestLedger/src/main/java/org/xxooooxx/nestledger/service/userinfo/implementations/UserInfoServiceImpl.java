@@ -12,6 +12,7 @@ package org.xxooooxx.nestledger.service.userinfo.implementations;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.xxooooxx.nestledger.dao.ledger.interfaces.LedgerDao;
 import org.xxooooxx.nestledger.dao.userinfo.interfaces.UserInfoDao;
 import org.xxooooxx.nestledger.service.userinfo.interfaces.UserInfoService;
@@ -29,6 +30,7 @@ public class UserInfoServiceImpl implements UserInfoService {
     @Autowired
     private LedgerDao ledgerDao;
 
+    @Transactional
     @Override
     public UserInfoGetResponse createUserInfoIfNeeded(String id) {
         UserInfoDB existingUserInfo = userInfoDao.getUserInfoById(id);
