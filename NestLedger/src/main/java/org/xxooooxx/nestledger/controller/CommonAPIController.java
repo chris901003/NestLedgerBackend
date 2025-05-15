@@ -8,7 +8,7 @@ import org.xxooooxx.nestledger.vo.api.response.AllAPIResponseData;
 
 @RestController
 public class CommonAPIController {
-    @RequestMapping("/")
+    @GetMapping("/")
     public String root() {
         return "<html><head><title>Nest Ledger Backend API</title></head>" +
                 "<body><h1>Welcome to Nest Ledger Backend API</h1>" +

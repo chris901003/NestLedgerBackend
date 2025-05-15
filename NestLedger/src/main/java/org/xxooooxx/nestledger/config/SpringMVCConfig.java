@@ -14,6 +14,14 @@ public class SpringMVCConfig implements WebMvcConfigurer {
 
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
-        registry.addInterceptor(firebaseAuthenticationInterceptor).addPathPatterns("/**");
+        registry.addInterceptor(firebaseAuthenticationInterceptor)
+                .addPathPatterns("/**")
+                .excludePathPatterns(
+                    "/v3/api-docs/**",        // OpenAPI 文件
+                    "/swagger-ui/**",         // Swagger UI 靜態資源
+                    "/swagger-ui.html",       // Swagger UI 頁面
+                    "/webjars/**",            // 靜態資源 (CSS/JS)
+                    "/swagger-resources/**"   // Swagger 資源
+                );
     }
 }
