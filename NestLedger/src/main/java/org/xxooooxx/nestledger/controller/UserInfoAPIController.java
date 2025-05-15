@@ -19,7 +19,7 @@ import org.xxooooxx.nestledger.utility.UserContext;
 import org.xxooooxx.nestledger.vo.userinfo.response.UserInfoGetResponse;
 
 @RestController
-@RequestMapping("/user")
+@RequestMapping("/v1/user")
 public class UserInfoAPIController {
 
     @Autowired

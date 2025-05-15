@@ -21,7 +21,7 @@ import org.xxooooxx.nestledger.vo.ledger.request.LedgerCreate;
 import org.xxooooxx.nestledger.vo.ledger.response.LedgerGetResponse;
 
 @RestController
-@RequestMapping("/ledger")
+@RequestMapping("/v1/ledger")
 public class LedgerAPIController {
 
     @Autowired
