@@ -31,9 +31,11 @@ public class UserInfoDaoImpl implements UserInfoDao {
 
     @Override
     public UserInfoDB getUserInfoById(String id) {
-        String queryStr = String.format("{ \"id\": \"%s\" }", id);
-        BasicQuery query = new BasicQuery(queryStr);
-        return mongoTemplate.findOne(query, UserInfoDB.class);
+        UserInfoDB userInfoDB = mongoTemplate.findOne(new Query(Criteria.where("id").is(id)), UserInfoDB.class);
+        if (userInfoDB == null) {
+            throw new CustomException(CustomExceptionEnum.USER_INFO_NOT_FOUND);
+        }
+        return userInfoDB;
     }
 
     public UserInfoDB getUserInfoByEmail(String email) {
