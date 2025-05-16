@@ -27,9 +27,9 @@ public class LedgerDB {
 
     private ArrayList<String> userIds = new ArrayList<>();
 
-    private BigDecimal totalIncome = BigDecimal.ZERO;
+    private Integer totalIncome = 0;
 
-    private BigDecimal totalExpense = BigDecimal.ZERO;
+    private Integer totalExpense = 0;
 
     private Integer version = 1;
 }

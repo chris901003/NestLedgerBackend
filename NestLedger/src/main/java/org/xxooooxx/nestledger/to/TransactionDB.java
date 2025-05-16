@@ -24,7 +24,7 @@ public class TransactionDB {
     private String _id;
     private String title = "";
     private String note = "";
-    private BigDecimal money = BigDecimal.ZERO;
+    private Integer money = 0;
     private Date date;
     private String type;
     private String userId;

@@ -9,6 +9,8 @@
  */
 package org.xxooooxx.nestledger.dao.ledger.implementations;
 
+import com.mongodb.client.result.UpdateResult;
+import org.bson.types.Decimal128;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mongodb.core.FindAndModifyOptions;
 import org.springframework.data.mongodb.core.MongoTemplate;
@@ -42,8 +44,8 @@ public class LedgerDaoImpl implements LedgerDao {
         ledgerDB.setUserIds(new ArrayList<>());
         ledgerDB.setTitle(createData.getTitle());
         ledgerDB.getUserIds().add(createData.getUserId());
-        ledgerDB.setTotalExpense(BigDecimal.ZERO);
-        ledgerDB.setTotalIncome(BigDecimal.ZERO);
+        ledgerDB.setTotalExpense(0);
+        ledgerDB.setTotalIncome(0);
         ledgerDB.setVersion(createData.getVersion());
         return mongoTemplate.insert(ledgerDB);
     }
@@ -100,5 +102,25 @@ public class LedgerDaoImpl implements LedgerDao {
             throw new CustomException(CustomExceptionEnum.INVALID_DELETE_MAIN_LEDGER);
         }
         mongoTemplate.remove(ledgerDB);
+    }
+
+    @Override
+    public void incrementTotalIncome(String ledgerId, Integer amount) {
+        Query query = new Query(Criteria.where("_id").is(ledgerId));
+        Update update = new Update().inc("totalIncome", amount);
+        UpdateResult result = mongoTemplate.updateFirst(query, update, LedgerDB.class);
+        if (result.getMatchedCount() == 0) {
+            throw new CustomException(CustomExceptionEnum.LEDGER_NOT_FOUND);
+        }
+    }
+
+    @Override
+    public void incrementTotalExpense(String ledgerId, Integer amount) {
+        Query query = new Query(Criteria.where("_id").is(ledgerId));
+        Update update = new Update().inc("totalExpense", amount);
+        UpdateResult result = mongoTemplate.updateFirst(query, update, LedgerDB.class);
+        if (result.getMatchedCount() == 0) {
+            throw new CustomException(CustomExceptionEnum.LEDGER_NOT_FOUND);
+        }
     }
 }

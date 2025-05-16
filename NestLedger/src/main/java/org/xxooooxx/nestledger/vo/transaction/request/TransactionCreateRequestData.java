@@ -20,7 +20,9 @@ import java.util.Date;
 public class TransactionCreateRequestData {
     private String title = "";
     private String note = "";
-    private BigDecimal money = BigDecimal.ZERO;
+
+    @NotNull
+    private Integer money;
 
     @NotNull
     private Date date;
