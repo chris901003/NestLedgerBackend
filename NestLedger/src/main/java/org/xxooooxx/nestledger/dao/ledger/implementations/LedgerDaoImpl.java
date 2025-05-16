@@ -20,6 +20,7 @@ import org.xxooooxx.nestledger.dao.ledger.interfaces.LedgerDao;
 import org.xxooooxx.nestledger.exception.CustomException;
 import org.xxooooxx.nestledger.exception.CustomExceptionEnum;
 import org.xxooooxx.nestledger.to.LedgerDB;
+import org.xxooooxx.nestledger.utility.MongoDbUpdateUtility;
 import org.xxooooxx.nestledger.utility.UserContext;
 import org.xxooooxx.nestledger.vo.ledger.request.LedgerCreateRequestData;
 import org.xxooooxx.nestledger.vo.ledger.request.LedgerUpdateRequestData;
@@ -76,15 +77,7 @@ public class LedgerDaoImpl implements LedgerDao {
         }
 
         Query query = new Query(Criteria.where("_id").is(data.get_id()));
-        Update update = new Update();
-
-        for (Field field: data.getClass().getDeclaredFields()) {
-            field.setAccessible(true);
-            Object value = field.get(data);
-            if (value != null) {
-                update.set(field.getName(), value);
-            }
-        }
+        Update update = MongoDbUpdateUtility.getFullUpdate(data);
 
         if (!update.getUpdateObject().isEmpty()) {
             FindAndModifyOptions options = new FindAndModifyOptions().returnNew(true).upsert(false);
