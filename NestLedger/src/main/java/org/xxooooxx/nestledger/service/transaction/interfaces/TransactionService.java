@@ -14,4 +14,5 @@ import org.xxooooxx.nestledger.vo.transaction.response.TransactionGetResponseDat
 
 public interface TransactionService {
     TransactionGetResponseData createTransaction(TransactionCreateRequestData data);
+    TransactionGetResponseData getTransaction(String transactionId);
 }

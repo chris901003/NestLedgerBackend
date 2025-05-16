@@ -11,10 +11,7 @@ package org.xxooooxx.nestledger.controller;
 
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.xxooooxx.nestledger.common.Response;
 import org.xxooooxx.nestledger.service.transaction.interfaces.TransactionService;
 import org.xxooooxx.nestledger.vo.transaction.request.TransactionCreateRequestData;
@@ -32,6 +29,14 @@ public class TransactionAPIController {
             @RequestBody @Valid TransactionCreateRequestData data
     ) {
         TransactionGetResponseData responseData = transactionService.createTransaction(data);
+        return Response.success(responseData);
+    }
+
+    @GetMapping("/get")
+    public Response<TransactionGetResponseData> getTransaction(
+            @RequestParam String transactionId
+    ) {
+        TransactionGetResponseData responseData = transactionService.getTransaction(transactionId);
         return Response.success(responseData);
     }
 }

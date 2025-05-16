@@ -21,7 +21,11 @@ public enum CustomExceptionEnum {
     INVALID_CHANGE_MAIN_LEDGER_TITLE(3003, "Invalid change main ledger title"),
     UNAUTHORIZED_UPDATE_LEDGER(3004, "Unauthorized update ledger"),
     UNAUTHORIZED_DELETE_LEDGER(3005, "Unauthorized delete ledger"),
-    INVALID_DELETE_MAIN_LEDGER(3006, "Invalid delete main ledger"),;
+    INVALID_DELETE_MAIN_LEDGER(3006, "Invalid delete main ledger"),
+
+    // Transaction
+    TRANSACTION_NOT_FOUND(4001, "Transaction not found"),
+    UNAUTHORIZED_OPERATION_ON_TRANSACTION(4002, "Unauthorized operation on transaction"),;
 
     @Getter
     final private Integer code;

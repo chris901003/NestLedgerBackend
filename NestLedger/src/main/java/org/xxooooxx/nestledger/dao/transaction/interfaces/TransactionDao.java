@@ -14,4 +14,5 @@ import org.xxooooxx.nestledger.vo.transaction.request.TransactionCreateRequestDa
 
 public interface TransactionDao {
     TransactionDB createTransaction(TransactionCreateRequestData data);
+    TransactionDB getTransaction(String transactionId);
 }

@@ -11,8 +11,12 @@ package org.xxooooxx.nestledger.dao.transaction.implementations;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mongodb.core.MongoTemplate;
+import org.springframework.data.mongodb.core.query.Criteria;
+import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.stereotype.Component;
 import org.xxooooxx.nestledger.dao.transaction.interfaces.TransactionDao;
+import org.xxooooxx.nestledger.exception.CustomException;
+import org.xxooooxx.nestledger.exception.CustomExceptionEnum;
 import org.xxooooxx.nestledger.to.TransactionDB;
 import org.xxooooxx.nestledger.vo.transaction.request.TransactionCreateRequestData;
 
@@ -34,5 +38,16 @@ public class TransactionDaoImpl implements TransactionDao {
         transactionDB.setLedgerId(data.getLedgerId());
         transactionDB.setVersion(data.getVersion());
         return mongoTemplate.insert(transactionDB);
+    }
+
+    @Override
+    public TransactionDB getTransaction(String id) {
+        TransactionDB transactionDB = mongoTemplate.findOne(
+                Query.query(Criteria.where("_id").is(id)), TransactionDB.class
+        );
+        if (transactionDB == null) {
+            throw new CustomException(CustomExceptionEnum.TRANSACTION_NOT_FOUND);
+        }
+        return transactionDB;
     }
 }
