@@ -12,7 +12,8 @@ public enum CustomExceptionEnum {
 
     // User
     USER_INFO_NOT_FOUND(2001, "User info not found"),
-    UNAUTHORIZED_UPDATE_USER_INFO(2002, "Unauthorized update user info");
+    UNAUTHORIZED_UPDATE_USER_INFO(2002, "Unauthorized update user info"),
+    USER_AVATAR_NOT_FOUND(2003, "User avatar not found"),;
 
     @Getter
     final private Integer code;

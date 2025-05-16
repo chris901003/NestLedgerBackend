@@ -13,6 +13,9 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseAuthException;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.InputStreamResource;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -24,6 +27,8 @@ import org.xxooooxx.nestledger.utility.UserContext;
 import org.xxooooxx.nestledger.vo.userinfo.request.UserInfoUpdateRequestData;
 import org.xxooooxx.nestledger.vo.userinfo.response.UserInfoGetResponse;
 
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.List;
 import java.util.Map;
@@ -92,5 +97,25 @@ public class UserInfoAPIController {
     public Response<Long> uploadAvatar(@RequestParam("avatar") MultipartFile file) throws IOException {
         String uid = UserContext.getUid();
         return Response.success(userInfoService.uploadAvatar(uid, file));
+    }
+
+    @GetMapping("/avatar")
+    public ResponseEntity<InputStreamResource> getAvatar(@RequestParam(value = "uid") String uid) throws IOException {
+        String filePath = "C:\\Users\\ediet\\Documents\\Codes\\NestLedgerDB\\files\\" + uid + "\\";
+        String fileName = uid + ".jpg";
+
+        // Check if the file exists
+        java.io.File file = new java.io.File(filePath + fileName);
+        if (!file.exists()) {
+            throw new CustomException(CustomExceptionEnum.USER_AVATAR_NOT_FOUND);
+        }
+
+        FileInputStream inputStream = new FileInputStream(filePath + fileName);
+        InputStreamResource resource = new InputStreamResource(inputStream);
+        return ResponseEntity.ok()
+                .contentType(MediaType.APPLICATION_OCTET_STREAM)
+                .contentLength(inputStream.available())
+                .header("Content-Disposition", "attachment; filename=\"" + fileName + "\"")
+                .body(resource);
     }
 }
