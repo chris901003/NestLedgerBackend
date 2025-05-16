@@ -9,6 +9,7 @@
  */
 package org.xxooooxx.nestledger.to;
 
+import lombok.Builder;
 import lombok.Data;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
@@ -20,13 +21,22 @@ import java.util.ArrayList;
 public class UserInfoDB {
     @Id
     private String _id;
+
     private String id;
-    private String userName;
-    private String emailAddress;
-    private String avatar;
-    private Integer timeZone;
-    private Double imageQuality;
-    private ArrayList<String> ledgerIds;
-    private Boolean isDelete;
-    private Integer version;
+
+    private String userName = "";
+
+    private String emailAddress = "";
+
+    private String avatar = "";
+
+    private Integer timeZone = 8;
+
+    private Double imageQuality = 0.5;
+
+    private ArrayList<String> ledgerIds = new ArrayList<>();
+
+    private Boolean isDelete = false;
+
+    private Integer version = 1;
 }
