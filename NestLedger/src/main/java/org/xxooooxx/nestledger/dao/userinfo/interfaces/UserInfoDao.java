@@ -12,6 +12,8 @@ public interface UserInfoDao {
      */
     UserInfoDB getUserInfoById(String id);
 
+    UserInfoDB getUserInfoByEmail(String email);
+
     /**
      * Get user info by user id
      *

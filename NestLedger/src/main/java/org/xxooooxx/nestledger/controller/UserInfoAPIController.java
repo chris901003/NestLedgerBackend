@@ -37,6 +37,13 @@ public class UserInfoAPIController {
         return Response.success(userInfoService.getUserInfoById(uid));
     }
 
+    @GetMapping("/get-user-by-email")
+    public Response<UserInfoGetResponse> getUserInfoByEmail(
+            @RequestParam(value = "email") String email
+    ) {
+        return Response.success(userInfoService.getUserInfoByEmail(email));
+    }
+
     @PatchMapping("/update")
     public Response<UserInfoGetResponse> updateUserInfo(@RequestBody @Valid UserInfoUpdateRequestData data)
             throws IllegalAccessException {

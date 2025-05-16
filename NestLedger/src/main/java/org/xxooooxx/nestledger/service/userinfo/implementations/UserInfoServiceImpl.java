@@ -60,6 +60,13 @@ public class UserInfoServiceImpl implements UserInfoService {
         return new UserInfoGetResponse(userInfoDB);
     }
 
+    @Override
+    public UserInfoGetResponse getUserInfoByEmail(String email) {
+        UserInfoDB userInfoDB = userInfoDao.getUserInfoByEmail(email);
+        return new UserInfoGetResponse(userInfoDB);
+    }
+
+    @Override
     public UserInfoGetResponse updateUserInfo(UserInfoUpdateRequestData data) throws IllegalAccessException {
         if (userInfoDao.getUserInfoById(data.getId()) == null) {
             throw new CustomException(CustomExceptionEnum.USER_INFO_NOT_FOUND);

@@ -15,5 +15,6 @@ import org.xxooooxx.nestledger.vo.userinfo.response.UserInfoGetResponse;
 public interface UserInfoService {
     UserInfoGetResponse createUserInfoIfNeeded(String id);
     UserInfoGetResponse getUserInfoById(String id);
+    UserInfoGetResponse getUserInfoByEmail(String email);
     UserInfoGetResponse updateUserInfo(UserInfoUpdateRequestData data) throws IllegalAccessException;
 }

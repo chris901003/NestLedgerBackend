@@ -15,6 +15,8 @@ import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.query.*;
 import org.springframework.stereotype.Component;
 import org.xxooooxx.nestledger.dao.userinfo.interfaces.UserInfoDao;
+import org.xxooooxx.nestledger.exception.CustomException;
+import org.xxooooxx.nestledger.exception.CustomExceptionEnum;
 import org.xxooooxx.nestledger.to.UserInfoDB;
 import org.xxooooxx.nestledger.vo.userinfo.request.UserInfoUpdateRequestData;
 
@@ -32,6 +34,16 @@ public class UserInfoDaoImpl implements UserInfoDao {
         String queryStr = String.format("{ \"id\": \"%s\" }", id);
         BasicQuery query = new BasicQuery(queryStr);
         return mongoTemplate.findOne(query, UserInfoDB.class);
+    }
+
+    public UserInfoDB getUserInfoByEmail(String email) {
+        UserInfoDB userInfoDB = mongoTemplate.findOne(
+                new Query(Criteria.where("emailAddress").is(email)), UserInfoDB.class
+        );
+        if (userInfoDB == null) {
+            throw new CustomException(CustomExceptionEnum.USER_INFO_NOT_FOUND);
+        }
+        return userInfoDB;
     }
 
     @Override
