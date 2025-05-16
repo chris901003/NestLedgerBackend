@@ -10,11 +10,10 @@
 package org.xxooooxx.nestledger.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.xxooooxx.nestledger.common.Response;
+import org.xxooooxx.nestledger.exception.CustomException;
+import org.xxooooxx.nestledger.exception.CustomExceptionEnum;
 import org.xxooooxx.nestledger.service.ledger.interfaces.LedgerService;
 import org.xxooooxx.nestledger.utility.UserContext;
 import org.xxooooxx.nestledger.vo.ledger.request.LedgerCreateRequestData;
@@ -34,5 +33,15 @@ public class LedgerAPIController {
             createData.setUserId(uid);
         }
         return Response.success(ledgerService.createLedger(createData));
+    }
+
+    @GetMapping("/get")
+    public Response<LedgerGetResponseData> getLedger(@RequestParam String ledgerId) {
+        String uid = UserContext.getUid();
+        LedgerGetResponseData response = ledgerService.getLedger(ledgerId);
+        if (!response.getUserIds().contains(uid)) {
+            throw new CustomException(CustomExceptionEnum.UNAUTHORIZED_GET_LEDGER);
+        }
+        return Response.success(ledgerService.getLedger(ledgerId));
     }
 }

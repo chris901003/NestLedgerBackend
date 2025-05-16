@@ -14,4 +14,5 @@ import org.xxooooxx.nestledger.vo.ledger.request.LedgerCreateRequestData;
 
 public interface LedgerDao {
     LedgerDB createLedger(LedgerCreateRequestData createData);
+    LedgerDB getLedger(String ledgerId);
 }

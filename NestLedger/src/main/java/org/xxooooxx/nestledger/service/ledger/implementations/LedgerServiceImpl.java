@@ -28,4 +28,10 @@ public class LedgerServiceImpl implements LedgerService {
         LedgerDB ledgerDB = ledgerDao.createLedger(createData);
         return new LedgerGetResponseData(ledgerDB);
     }
+
+    @Override
+    public LedgerGetResponseData getLedger(String ledgerId) {
+        LedgerDB ledgerDB = ledgerDao.getLedger(ledgerId);
+        return new LedgerGetResponseData(ledgerDB);
+    }
 }

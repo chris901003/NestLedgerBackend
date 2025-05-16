@@ -14,4 +14,5 @@ import org.xxooooxx.nestledger.vo.ledger.response.LedgerGetResponseData;
 
 public interface LedgerService {
     LedgerGetResponseData createLedger(LedgerCreateRequestData createData);
+    LedgerGetResponseData getLedger(String ledgerId);
 }
