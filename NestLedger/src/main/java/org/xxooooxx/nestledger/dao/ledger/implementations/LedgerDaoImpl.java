@@ -10,18 +10,24 @@
 package org.xxooooxx.nestledger.dao.ledger.implementations;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.mongodb.core.FindAndModifyOptions;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
+import org.springframework.data.mongodb.core.query.Update;
 import org.springframework.stereotype.Component;
 import org.xxooooxx.nestledger.dao.ledger.interfaces.LedgerDao;
 import org.xxooooxx.nestledger.exception.CustomException;
 import org.xxooooxx.nestledger.exception.CustomExceptionEnum;
 import org.xxooooxx.nestledger.to.LedgerDB;
+import org.xxooooxx.nestledger.utility.UserContext;
 import org.xxooooxx.nestledger.vo.ledger.request.LedgerCreateRequestData;
+import org.xxooooxx.nestledger.vo.ledger.request.LedgerUpdateRequestData;
 
+import java.lang.reflect.Field;
 import java.math.BigDecimal;
 import java.util.ArrayList;
+import java.util.Objects;
 
 @Component
 public class LedgerDaoImpl implements LedgerDao {
@@ -48,5 +54,42 @@ public class LedgerDaoImpl implements LedgerDao {
             throw new CustomException(CustomExceptionEnum.LEDGER_NOT_FOUND);
         }
         return ledgerDB;
+    }
+
+    @Override
+    public LedgerDB updateLedger(LedgerUpdateRequestData data) throws IllegalAccessException {
+        // Block update title when ledger is main ledger
+        LedgerDB ledgerDB = getLedger(data.get_id());
+        if (ledgerDB == null) {
+            throw new CustomException(CustomExceptionEnum.LEDGER_NOT_FOUND);
+        } else if (data.getTitle() != null &&
+                ledgerDB.getTitle().startsWith("[Main]") &&
+                !Objects.equals(data.getTitle(), ledgerDB.getTitle())
+        ) {
+            throw new CustomException(CustomExceptionEnum.INVALID_CHANGE_MAIN_LEDGER_TITLE);
+        }
+
+        // Block unauthorized update
+        String uid = UserContext.getUid();
+        if (!ledgerDB.getUserIds().contains(uid)) {
+            throw new CustomException(CustomExceptionEnum.UNAUTHORIZED_UPDATE_LEDGER);
+        }
+
+        Query query = new Query(Criteria.where("_id").is(data.get_id()));
+        Update update = new Update();
+
+        for (Field field: data.getClass().getDeclaredFields()) {
+            field.setAccessible(true);
+            Object value = field.get(data);
+            if (value != null) {
+                update.set(field.getName(), value);
+            }
+        }
+
+        if (!update.getUpdateObject().isEmpty()) {
+            FindAndModifyOptions options = new FindAndModifyOptions().returnNew(true).upsert(false);
+            return mongoTemplate.findAndModify(query, update, options, LedgerDB.class);
+        }
+        return null;
     }
 }

@@ -11,8 +11,10 @@ package org.xxooooxx.nestledger.dao.ledger.interfaces;
 
 import org.xxooooxx.nestledger.to.LedgerDB;
 import org.xxooooxx.nestledger.vo.ledger.request.LedgerCreateRequestData;
+import org.xxooooxx.nestledger.vo.ledger.request.LedgerUpdateRequestData;
 
 public interface LedgerDao {
     LedgerDB createLedger(LedgerCreateRequestData createData);
     LedgerDB getLedger(String ledgerId);
+    LedgerDB updateLedger(LedgerUpdateRequestData data) throws IllegalAccessException;
 }

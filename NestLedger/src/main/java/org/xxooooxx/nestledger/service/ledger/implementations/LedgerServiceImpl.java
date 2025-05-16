@@ -15,6 +15,7 @@ import org.xxooooxx.nestledger.dao.ledger.interfaces.LedgerDao;
 import org.xxooooxx.nestledger.service.ledger.interfaces.LedgerService;
 import org.xxooooxx.nestledger.to.LedgerDB;
 import org.xxooooxx.nestledger.vo.ledger.request.LedgerCreateRequestData;
+import org.xxooooxx.nestledger.vo.ledger.request.LedgerUpdateRequestData;
 import org.xxooooxx.nestledger.vo.ledger.response.LedgerGetResponseData;
 
 @Service
@@ -32,6 +33,12 @@ public class LedgerServiceImpl implements LedgerService {
     @Override
     public LedgerGetResponseData getLedger(String ledgerId) {
         LedgerDB ledgerDB = ledgerDao.getLedger(ledgerId);
+        return new LedgerGetResponseData(ledgerDB);
+    }
+
+    @Override
+    public LedgerGetResponseData updateLedger(LedgerUpdateRequestData updateData) throws IllegalAccessException {
+        LedgerDB ledgerDB = ledgerDao.updateLedger(updateData);
         return new LedgerGetResponseData(ledgerDB);
     }
 }

@@ -9,6 +9,7 @@
  */
 package org.xxooooxx.nestledger.controller;
 
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import org.xxooooxx.nestledger.common.Response;
@@ -17,6 +18,7 @@ import org.xxooooxx.nestledger.exception.CustomExceptionEnum;
 import org.xxooooxx.nestledger.service.ledger.interfaces.LedgerService;
 import org.xxooooxx.nestledger.utility.UserContext;
 import org.xxooooxx.nestledger.vo.ledger.request.LedgerCreateRequestData;
+import org.xxooooxx.nestledger.vo.ledger.request.LedgerUpdateRequestData;
 import org.xxooooxx.nestledger.vo.ledger.response.LedgerGetResponseData;
 
 @RestController
@@ -43,5 +45,12 @@ public class LedgerAPIController {
             throw new CustomException(CustomExceptionEnum.UNAUTHORIZED_GET_LEDGER);
         }
         return Response.success(ledgerService.getLedger(ledgerId));
+    }
+
+    @PatchMapping("/update")
+    public Response<LedgerGetResponseData> updateLedger(
+            @RequestBody @Valid LedgerUpdateRequestData updateData
+    ) throws IllegalAccessException {
+        return Response.success(ledgerService.updateLedger(updateData));
     }
 }

@@ -10,9 +10,11 @@
 package org.xxooooxx.nestledger.service.ledger.interfaces;
 
 import org.xxooooxx.nestledger.vo.ledger.request.LedgerCreateRequestData;
+import org.xxooooxx.nestledger.vo.ledger.request.LedgerUpdateRequestData;
 import org.xxooooxx.nestledger.vo.ledger.response.LedgerGetResponseData;
 
 public interface LedgerService {
     LedgerGetResponseData createLedger(LedgerCreateRequestData createData);
     LedgerGetResponseData getLedger(String ledgerId);
+    LedgerGetResponseData updateLedger(LedgerUpdateRequestData updateData) throws IllegalAccessException;
 }
