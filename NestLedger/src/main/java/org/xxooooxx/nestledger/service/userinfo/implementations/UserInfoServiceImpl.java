@@ -13,6 +13,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 import org.xxooooxx.nestledger.dao.ledger.interfaces.LedgerDao;
 import org.xxooooxx.nestledger.dao.userinfo.interfaces.UserInfoDao;
 import org.xxooooxx.nestledger.exception.CustomException;
@@ -23,6 +24,9 @@ import org.xxooooxx.nestledger.vo.ledger.request.LedgerCreate;
 import org.xxooooxx.nestledger.vo.userinfo.request.UserInfoUpdateRequestData;
 import org.xxooooxx.nestledger.vo.userinfo.response.UserInfoGetResponse;
 
+import java.io.File;
+import java.io.IOException;
+import java.math.BigDecimal;
 import java.util.List;
 
 @Slf4j
@@ -89,6 +93,20 @@ public class UserInfoServiceImpl implements UserInfoService {
     public UserInfoGetResponse deleteUserInfo(String id) {
         UserInfoDB userInfoDB = userInfoDao.deleteUserInfo(id);
         return new UserInfoGetResponse(userInfoDB);
+    }
+
+    @Override
+    public Long uploadAvatar(String id, MultipartFile file) throws IOException {
+        String filePath = "C:\\Users\\ediet\\Documents\\Codes\\NestLedgerDB\\files\\" + id + "\\";
+        String fileName = id + ".jpg";
+
+        // If folder does not exist, create it
+        java.io.File folder = new java.io.File(filePath);
+        if (!folder.exists()) {
+            boolean isCreated = folder.mkdirs();
+        }
+        file.transferTo(new File(filePath + fileName));
+        return file.getSize();
     }
 
     private UserInfoDB createUserInfo(String id) {

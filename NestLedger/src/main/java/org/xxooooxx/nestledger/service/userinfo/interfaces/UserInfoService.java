@@ -9,9 +9,12 @@
  */
 package org.xxooooxx.nestledger.service.userinfo.interfaces;
 
+import org.springframework.web.multipart.MultipartFile;
 import org.xxooooxx.nestledger.vo.userinfo.request.UserInfoUpdateRequestData;
 import org.xxooooxx.nestledger.vo.userinfo.response.UserInfoGetResponse;
 
+import java.io.IOException;
+import java.math.BigDecimal;
 import java.util.List;
 
 public interface UserInfoService {
@@ -21,4 +24,5 @@ public interface UserInfoService {
     UserInfoGetResponse getUserInfoByEmail(String email);
     UserInfoGetResponse updateUserInfo(UserInfoUpdateRequestData data) throws IllegalAccessException;
     UserInfoGetResponse deleteUserInfo(String id);
+    Long uploadAvatar(String id, MultipartFile file) throws IOException;
 }

@@ -15,6 +15,7 @@ import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 import org.xxooooxx.nestledger.common.Response;
 import org.xxooooxx.nestledger.exception.CustomException;
 import org.xxooooxx.nestledger.exception.CustomExceptionEnum;
@@ -23,10 +24,9 @@ import org.xxooooxx.nestledger.utility.UserContext;
 import org.xxooooxx.nestledger.vo.userinfo.request.UserInfoUpdateRequestData;
 import org.xxooooxx.nestledger.vo.userinfo.response.UserInfoGetResponse;
 
-import java.util.Arrays;
+import java.io.IOException;
 import java.util.List;
 import java.util.Map;
-import java.util.Objects;
 
 @RestController
 @RequestMapping("/v1/user")
@@ -86,5 +86,11 @@ public class UserInfoAPIController {
         // Delete user data from Firebase
         FirebaseAuth.getInstance().deleteUser(uid);
         return Response.success(userInfoService.deleteUserInfo(uid));
+    }
+
+    @PostMapping("/upload-avatar")
+    public Response<Long> uploadAvatar(@RequestParam("avatar") MultipartFile file) throws IOException {
+        String uid = UserContext.getUid();
+        return Response.success(userInfoService.uploadAvatar(uid, file));
     }
 }
