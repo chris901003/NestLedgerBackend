@@ -23,6 +23,8 @@ import org.xxooooxx.nestledger.vo.ledger.request.LedgerCreate;
 import org.xxooooxx.nestledger.vo.userinfo.request.UserInfoUpdateRequestData;
 import org.xxooooxx.nestledger.vo.userinfo.response.UserInfoGetResponse;
 
+import java.util.List;
+
 @Slf4j
 @Service
 public class UserInfoServiceImpl implements UserInfoService {
@@ -58,6 +60,14 @@ public class UserInfoServiceImpl implements UserInfoService {
     public UserInfoGetResponse getUserInfoById(String id) {
         UserInfoDB userInfoDB = userInfoDao.getUserInfoById(id);
         return new UserInfoGetResponse(userInfoDB);
+    }
+
+    @Override
+    public List<UserInfoGetResponse> getMultipleUserInfoById(List<String> ids) {
+        List<UserInfoDB> userInfoDBList = userInfoDao.getMultipleUserInfoById(ids);
+        return userInfoDBList.stream()
+                .map(UserInfoGetResponse::new)
+                .toList();
     }
 
     @Override

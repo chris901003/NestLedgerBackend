@@ -20,6 +20,11 @@ import org.xxooooxx.nestledger.utility.UserContext;
 import org.xxooooxx.nestledger.vo.userinfo.request.UserInfoUpdateRequestData;
 import org.xxooooxx.nestledger.vo.userinfo.response.UserInfoGetResponse;
 
+import java.util.Arrays;
+import java.util.List;
+import java.util.Map;
+import java.util.Objects;
+
 @RestController
 @RequestMapping("/v1/user")
 public class UserInfoAPIController {
@@ -49,6 +54,15 @@ public class UserInfoAPIController {
     @GetMapping("/get-user-by-uid")
     public Response<UserInfoGetResponse> getUserInfoByUid(@RequestParam(value = "uid") String uid) {
         return Response.success(userInfoService.getUserInfoById(uid));
+    }
+
+    @PostMapping("/get-multiple-user-info")
+    public Response<List<UserInfoGetResponse>> getMultipleUserInfo(@RequestBody Map<String, List<String>> body) {
+        if (!body.containsKey("uids")) {
+            throw new CustomException(CustomExceptionEnum.MISSING_PARAMETER);
+        }
+        List<String> uids = body.get("uids");
+        return Response.success(userInfoService.getMultipleUserInfoById(uids));
     }
 
     @PatchMapping("/update")

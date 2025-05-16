@@ -3,6 +3,8 @@ package org.xxooooxx.nestledger.dao.userinfo.interfaces;
 import org.xxooooxx.nestledger.to.UserInfoDB;
 import org.xxooooxx.nestledger.vo.userinfo.request.UserInfoUpdateRequestData;
 
+import java.util.List;
+
 public interface UserInfoDao {
     /**
      * Get user info by id
@@ -13,6 +15,8 @@ public interface UserInfoDao {
     UserInfoDB getUserInfoById(String id);
 
     UserInfoDB getUserInfoByEmail(String email);
+
+    List<UserInfoDB> getMultipleUserInfoById(List<String> ids);
 
     /**
      * Get user info by user id

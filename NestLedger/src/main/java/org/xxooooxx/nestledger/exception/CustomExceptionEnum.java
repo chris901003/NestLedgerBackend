@@ -4,6 +4,9 @@ import lombok.Getter;
 
 public enum CustomExceptionEnum {
 
+    // Common
+    MISSING_PARAMETER(901, "Missing parameter"),
+
     // Account
     ACCOUNT_AUTHENTICATION_FAILED(1001, "Account authentication failed"),
 

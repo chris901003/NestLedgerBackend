@@ -21,6 +21,7 @@ import org.xxooooxx.nestledger.to.UserInfoDB;
 import org.xxooooxx.nestledger.vo.userinfo.request.UserInfoUpdateRequestData;
 
 import java.lang.reflect.Field;
+import java.util.List;
 
 
 @Component
@@ -38,6 +39,13 @@ public class UserInfoDaoImpl implements UserInfoDao {
         return userInfoDB;
     }
 
+    @Override
+    public List<UserInfoDB> getMultipleUserInfoById(List<String> ids) {
+        Query query = new Query(Criteria.where("id").in(ids));
+        return mongoTemplate.find(query, UserInfoDB.class);
+    }
+
+    @Override
     public UserInfoDB getUserInfoByEmail(String email) {
         UserInfoDB userInfoDB = mongoTemplate.findOne(
                 new Query(Criteria.where("emailAddress").is(email)), UserInfoDB.class
