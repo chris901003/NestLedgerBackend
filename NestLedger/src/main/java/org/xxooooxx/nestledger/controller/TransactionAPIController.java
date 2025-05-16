@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.*;
 import org.xxooooxx.nestledger.common.Response;
 import org.xxooooxx.nestledger.service.transaction.interfaces.TransactionService;
 import org.xxooooxx.nestledger.vo.transaction.request.TransactionCreateRequestData;
+import org.xxooooxx.nestledger.vo.transaction.request.TransactionUpdateRequestData;
 import org.xxooooxx.nestledger.vo.transaction.response.TransactionGetResponseData;
 
 @RestController
@@ -37,6 +38,14 @@ public class TransactionAPIController {
             @RequestParam String transactionId
     ) {
         TransactionGetResponseData responseData = transactionService.getTransaction(transactionId);
+        return Response.success(responseData);
+    }
+
+    @PatchMapping("/update")
+    public Response<TransactionGetResponseData> updateTransaction(
+            @RequestBody @Valid TransactionUpdateRequestData data
+    ) throws IllegalAccessException {
+        TransactionGetResponseData responseData = transactionService.updateTransaction(data);
         return Response.success(responseData);
     }
 }

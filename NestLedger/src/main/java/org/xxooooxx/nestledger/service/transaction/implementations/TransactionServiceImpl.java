@@ -21,6 +21,7 @@ import org.xxooooxx.nestledger.to.LedgerDB;
 import org.xxooooxx.nestledger.to.TransactionDB;
 import org.xxooooxx.nestledger.utility.UserContext;
 import org.xxooooxx.nestledger.vo.transaction.request.TransactionCreateRequestData;
+import org.xxooooxx.nestledger.vo.transaction.request.TransactionUpdateRequestData;
 import org.xxooooxx.nestledger.vo.transaction.response.TransactionGetResponseData;
 
 import java.util.Objects;
@@ -35,6 +36,7 @@ public class TransactionServiceImpl implements TransactionService {
     private LedgerDao ledgerDao;
 
     @Transactional
+    @Override
     public TransactionGetResponseData createTransaction(TransactionCreateRequestData data) {
         checkIsInUserInLedger(data.getLedgerId());
         TransactionDB transactionDB = transactionDao.createTransaction(data);
@@ -46,10 +48,31 @@ public class TransactionServiceImpl implements TransactionService {
         return new TransactionGetResponseData(transactionDB);
     }
 
+    @Override
     public TransactionGetResponseData getTransaction(String transactionId) {
         TransactionDB transactionDB = transactionDao.getTransaction(transactionId);
         checkIsInUserInLedger(transactionDB.getLedgerId());
         return new TransactionGetResponseData(transactionDB);
+    }
+
+    @Transactional
+    @Override
+    public TransactionGetResponseData updateTransaction(TransactionUpdateRequestData data) throws IllegalAccessException {
+        TransactionDB transactionDB = transactionDao.getTransaction(data.get_id());
+        checkIsInUserInLedger(transactionDB.getLedgerId());
+        TransactionDB updatedTransactionDB = transactionDao.updateTransaction(data);
+
+        if (Objects.equals(transactionDB.getType(), "income")) {
+            ledgerDao.incrementTotalIncome(transactionDB.getLedgerId(), -transactionDB.getMoney());
+        } else {
+            ledgerDao.incrementTotalExpense(transactionDB.getLedgerId(), -transactionDB.getMoney());
+        }
+        if (Objects.equals(updatedTransactionDB.getType(), "income")) {
+            ledgerDao.incrementTotalIncome(transactionDB.getLedgerId(), updatedTransactionDB.getMoney());
+        } else {
+            ledgerDao.incrementTotalExpense(transactionDB.getLedgerId(), updatedTransactionDB.getMoney());
+        }
+        return new TransactionGetResponseData(updatedTransactionDB);
     }
 
     private void checkIsInUserInLedger(String ledgerId) {
