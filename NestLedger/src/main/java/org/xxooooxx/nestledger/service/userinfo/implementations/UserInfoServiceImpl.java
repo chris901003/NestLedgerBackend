@@ -38,11 +38,11 @@ public class UserInfoServiceImpl implements UserInfoService {
     @Transactional
     @Override
     public UserInfoGetResponse createUserInfoIfNeeded(String id) {
-        UserInfoDB existingUserInfo = userInfoDao.getUserInfoById(id);
-        if (existingUserInfo != null) {
+        try {
+            UserInfoDB existingUserInfo = userInfoDao.getUserInfoById(id);
             log.info("User info already exists: {}", id);
             return new UserInfoGetResponse(existingUserInfo);
-        } else {
+        } catch(CustomException e) {
             log.info("Creating new user info: {}", id);
             UserInfoDB newUserInfo = createUserInfo(id);
 

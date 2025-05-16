@@ -32,8 +32,7 @@ public class FirebaseAuthenticationInterceptor implements HandlerInterceptor {
                 FirebaseToken decodedToken = FirebaseAuth.getInstance().verifyIdToken(token);
                 String uid = decodedToken.getUid();
                 UserContext.setUid(uid);
-                System.out.println("User ID: " + uid);
-                log.info("User ID: " + uid + " authenticated successfully.");
+                log.info("User ID: {} authenticated successfully.", uid);
                 return true;
             } catch (FirebaseAuthException e) {
                 throw new CustomException(CustomExceptionEnum.ACCOUNT_AUTHENTICATION_FAILED);

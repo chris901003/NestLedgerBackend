@@ -9,8 +9,11 @@
  */
 package org.xxooooxx.nestledger.controller;
 
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseAuthException;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 import org.xxooooxx.nestledger.common.Response;
 import org.xxooooxx.nestledger.exception.CustomException;
@@ -75,9 +78,13 @@ public class UserInfoAPIController {
         return Response.success(userInfoService.updateUserInfo(data));
     }
 
+    @Transactional
     @DeleteMapping("/delete")
-    public Response<UserInfoGetResponse> deleteUserInfo() {
+    public Response<UserInfoGetResponse> deleteUserInfo() throws FirebaseAuthException {
         String uid = UserContext.getUid();
+
+        // Delete user data from Firebase
+        FirebaseAuth.getInstance().deleteUser(uid);
         return Response.success(userInfoService.deleteUserInfo(uid));
     }
 }
