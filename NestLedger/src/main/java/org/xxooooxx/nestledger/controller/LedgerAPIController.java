@@ -17,8 +17,8 @@ import org.springframework.web.bind.annotation.RestController;
 import org.xxooooxx.nestledger.common.Response;
 import org.xxooooxx.nestledger.service.ledger.interfaces.LedgerService;
 import org.xxooooxx.nestledger.utility.UserContext;
-import org.xxooooxx.nestledger.vo.ledger.request.LedgerCreate;
-import org.xxooooxx.nestledger.vo.ledger.response.LedgerGetResponse;
+import org.xxooooxx.nestledger.vo.ledger.request.LedgerCreateRequestData;
+import org.xxooooxx.nestledger.vo.ledger.response.LedgerGetResponseData;
 
 @RestController
 @RequestMapping("/v1/ledger")
@@ -28,7 +28,7 @@ public class LedgerAPIController {
     private LedgerService ledgerService;
 
     @PostMapping("/create")
-    public Response<LedgerGetResponse> createLedger(@RequestBody LedgerCreate createData) {
+    public Response<LedgerGetResponseData> createLedger(@RequestBody LedgerCreateRequestData createData) {
         String uid = UserContext.getUid();
         if (createData.getUserId() == null) {
             createData.setUserId(uid);

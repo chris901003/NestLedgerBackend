@@ -12,7 +12,7 @@ package org.xxooooxx.nestledger.vo.ledger.request;
 import lombok.Data;
 
 @Data
-public class LedgerCreate {
+public class LedgerCreateRequestData {
     private String title;
     private String userId;
     private Integer version;

@@ -9,9 +9,9 @@
  */
 package org.xxooooxx.nestledger.service.ledger.interfaces;
 
-import org.xxooooxx.nestledger.vo.ledger.request.LedgerCreate;
-import org.xxooooxx.nestledger.vo.ledger.response.LedgerGetResponse;
+import org.xxooooxx.nestledger.vo.ledger.request.LedgerCreateRequestData;
+import org.xxooooxx.nestledger.vo.ledger.response.LedgerGetResponseData;
 
 public interface LedgerService {
-    LedgerGetResponse createLedger(LedgerCreate createData);
+    LedgerGetResponseData createLedger(LedgerCreateRequestData createData);
 }

@@ -16,7 +16,7 @@ import java.math.BigDecimal;
 import java.util.ArrayList;
 
 @Data
-public class LedgerGetResponse {
+public class LedgerGetResponseData {
     private String _id;
     private String title;
     private ArrayList<String> userIds;
@@ -24,7 +24,7 @@ public class LedgerGetResponse {
     private BigDecimal totalExpense;
     private Integer version;
 
-    public LedgerGetResponse(LedgerDB data) {
+    public LedgerGetResponseData(LedgerDB data) {
         this._id = data.get_id();
         this.title = data.getTitle();
         this.userIds = data.getUserIds();

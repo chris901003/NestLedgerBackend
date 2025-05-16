@@ -14,8 +14,8 @@ import org.springframework.stereotype.Service;
 import org.xxooooxx.nestledger.dao.ledger.interfaces.LedgerDao;
 import org.xxooooxx.nestledger.service.ledger.interfaces.LedgerService;
 import org.xxooooxx.nestledger.to.LedgerDB;
-import org.xxooooxx.nestledger.vo.ledger.request.LedgerCreate;
-import org.xxooooxx.nestledger.vo.ledger.response.LedgerGetResponse;
+import org.xxooooxx.nestledger.vo.ledger.request.LedgerCreateRequestData;
+import org.xxooooxx.nestledger.vo.ledger.response.LedgerGetResponseData;
 
 @Service
 public class LedgerServiceImpl implements LedgerService {
@@ -24,8 +24,8 @@ public class LedgerServiceImpl implements LedgerService {
     private LedgerDao ledgerDao;
 
     @Override
-    public LedgerGetResponse createLedger(LedgerCreate createData) {
+    public LedgerGetResponseData createLedger(LedgerCreateRequestData createData) {
         LedgerDB ledgerDB = ledgerDao.createLedger(createData);
-        return new LedgerGetResponse(ledgerDB);
+        return new LedgerGetResponseData(ledgerDB);
     }
 }

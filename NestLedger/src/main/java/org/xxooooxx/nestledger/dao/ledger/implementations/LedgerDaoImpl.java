@@ -14,7 +14,7 @@ import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.stereotype.Component;
 import org.xxooooxx.nestledger.dao.ledger.interfaces.LedgerDao;
 import org.xxooooxx.nestledger.to.LedgerDB;
-import org.xxooooxx.nestledger.vo.ledger.request.LedgerCreate;
+import org.xxooooxx.nestledger.vo.ledger.request.LedgerCreateRequestData;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
@@ -26,7 +26,7 @@ public class LedgerDaoImpl implements LedgerDao {
     private MongoTemplate mongoTemplate;
 
     @Override
-    public LedgerDB createLedger(LedgerCreate createData) {
+    public LedgerDB createLedger(LedgerCreateRequestData createData) {
         LedgerDB ledgerDB = new LedgerDB();
         ledgerDB.setUserIds(new ArrayList<>());
         ledgerDB.setTitle(createData.getTitle());

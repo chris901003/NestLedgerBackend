@@ -20,13 +20,12 @@ import org.xxooooxx.nestledger.exception.CustomException;
 import org.xxooooxx.nestledger.exception.CustomExceptionEnum;
 import org.xxooooxx.nestledger.service.userinfo.interfaces.UserInfoService;
 import org.xxooooxx.nestledger.to.UserInfoDB;
-import org.xxooooxx.nestledger.vo.ledger.request.LedgerCreate;
+import org.xxooooxx.nestledger.vo.ledger.request.LedgerCreateRequestData;
 import org.xxooooxx.nestledger.vo.userinfo.request.UserInfoUpdateRequestData;
 import org.xxooooxx.nestledger.vo.userinfo.response.UserInfoGetResponse;
 
 import java.io.File;
 import java.io.IOException;
-import java.math.BigDecimal;
 import java.util.List;
 
 @Slf4j
@@ -51,11 +50,11 @@ public class UserInfoServiceImpl implements UserInfoService {
             UserInfoDB newUserInfo = createUserInfo(id);
 
             // Create main ledger
-            LedgerCreate ledgerCreate = new LedgerCreate();
-            ledgerCreate.setTitle("[Main]:" + id);
-            ledgerCreate.setUserId(id);
-            ledgerCreate.setVersion(1);
-            ledgerDao.createLedger(ledgerCreate);
+            LedgerCreateRequestData ledgerCreateRequestData = new LedgerCreateRequestData();
+            ledgerCreateRequestData.setTitle("[Main]:" + id);
+            ledgerCreateRequestData.setUserId(id);
+            ledgerCreateRequestData.setVersion(1);
+            ledgerDao.createLedger(ledgerCreateRequestData);
             return new UserInfoGetResponse(newUserInfo);
         }
     }

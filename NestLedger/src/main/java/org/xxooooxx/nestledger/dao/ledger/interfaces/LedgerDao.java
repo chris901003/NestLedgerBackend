@@ -10,8 +10,8 @@
 package org.xxooooxx.nestledger.dao.ledger.interfaces;
 
 import org.xxooooxx.nestledger.to.LedgerDB;
-import org.xxooooxx.nestledger.vo.ledger.request.LedgerCreate;
+import org.xxooooxx.nestledger.vo.ledger.request.LedgerCreateRequestData;
 
 public interface LedgerDao {
-    LedgerDB createLedger(LedgerCreate createData);
+    LedgerDB createLedger(LedgerCreateRequestData createData);
 }
