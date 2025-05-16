@@ -9,13 +9,13 @@
  */
 package org.xxooooxx.nestledger.controller;
 
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.xxooooxx.nestledger.common.Response;
 import org.xxooooxx.nestledger.service.userinfo.interfaces.UserInfoService;
 import org.xxooooxx.nestledger.utility.UserContext;
+import org.xxooooxx.nestledger.vo.userinfo.request.UserInfoUpdateRequestData;
 import org.xxooooxx.nestledger.vo.userinfo.response.UserInfoGetResponse;
 
 @RestController
@@ -35,5 +35,11 @@ public class UserInfoAPIController {
     public Response<UserInfoGetResponse> getUserInfo() {
         String uid = UserContext.getUid();
         return Response.success(userInfoService.getUserInfoById(uid));
+    }
+
+    @PatchMapping("/update")
+    public Response<UserInfoGetResponse> updateUserInfo(@RequestBody @Valid UserInfoUpdateRequestData data)
+            throws IllegalAccessException {
+        return Response.success(userInfoService.updateUserInfo(data));
     }
 }

@@ -25,4 +25,13 @@ public class Response<T> {
         response.setMessage(message);
         return response;
     }
+
+    public static Response<Object> error(Integer code, String message, Object data) {
+        Response<Object> response = new Response<>();
+        response.setCode(code);
+        response.setSuccess(false);
+        response.setMessage(message);
+        response.setData(data);
+        return response;
+    }
 }

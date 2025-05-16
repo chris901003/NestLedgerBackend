@@ -15,9 +15,12 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.xxooooxx.nestledger.dao.ledger.interfaces.LedgerDao;
 import org.xxooooxx.nestledger.dao.userinfo.interfaces.UserInfoDao;
+import org.xxooooxx.nestledger.exception.CustomException;
+import org.xxooooxx.nestledger.exception.CustomExceptionEnum;
 import org.xxooooxx.nestledger.service.userinfo.interfaces.UserInfoService;
 import org.xxooooxx.nestledger.to.UserInfoDB;
 import org.xxooooxx.nestledger.vo.ledger.request.LedgerCreate;
+import org.xxooooxx.nestledger.vo.userinfo.request.UserInfoUpdateRequestData;
 import org.xxooooxx.nestledger.vo.userinfo.response.UserInfoGetResponse;
 
 @Slf4j
@@ -54,6 +57,14 @@ public class UserInfoServiceImpl implements UserInfoService {
     @Override
     public UserInfoGetResponse getUserInfoById(String id) {
         UserInfoDB userInfoDB = userInfoDao.getUserInfoById(id);
+        return new UserInfoGetResponse(userInfoDB);
+    }
+
+    public UserInfoGetResponse updateUserInfo(UserInfoUpdateRequestData data) throws IllegalAccessException {
+        if (userInfoDao.getUserInfoById(data.getId()) == null) {
+            throw new CustomException(CustomExceptionEnum.USER_INFO_NOT_FOUND);
+        }
+        UserInfoDB userInfoDB = userInfoDao.updateUserInfo(data);
         return new UserInfoGetResponse(userInfoDB);
     }
 

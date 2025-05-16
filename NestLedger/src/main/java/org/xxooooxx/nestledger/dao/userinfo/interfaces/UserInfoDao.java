@@ -1,6 +1,7 @@
 package org.xxooooxx.nestledger.dao.userinfo.interfaces;
 
 import org.xxooooxx.nestledger.to.UserInfoDB;
+import org.xxooooxx.nestledger.vo.userinfo.request.UserInfoUpdateRequestData;
 
 public interface UserInfoDao {
     /**
@@ -18,4 +19,6 @@ public interface UserInfoDao {
      * @return UserInfoDB
      */
     UserInfoDB createUserInfo(String id);
+
+    UserInfoDB updateUserInfo(UserInfoUpdateRequestData data) throws IllegalAccessException;
 }

@@ -5,7 +5,10 @@ import lombok.Getter;
 public enum CustomExceptionEnum {
 
     // Account
-    ACCOUNT_AUTHENTICATION_FAILED(1001, "Account authentication failed");
+    ACCOUNT_AUTHENTICATION_FAILED(1001, "Account authentication failed"),
+
+    // User
+    USER_INFO_NOT_FOUND(2001, "User info not found");
 
     @Getter
     final private Integer code;
