@@ -92,4 +92,16 @@ public class UserInfoDaoImpl implements UserInfoDao {
         }
         return null;
     }
+
+    @Override
+    public UserInfoDB deleteUserInfo(String id) {
+        Query query = new Query(Criteria.where("id").is(id));
+        UserInfoDB userInfoDB = mongoTemplate.findOne(query, UserInfoDB.class);
+        if (userInfoDB == null) {
+            throw new CustomException(CustomExceptionEnum.USER_INFO_NOT_FOUND);
+        } else {
+            userInfoDB.setIsDelete(true);
+            return mongoTemplate.save(userInfoDB);
+        }
+    }
 }

@@ -85,6 +85,12 @@ public class UserInfoServiceImpl implements UserInfoService {
         return new UserInfoGetResponse(userInfoDB);
     }
 
+    @Override
+    public UserInfoGetResponse deleteUserInfo(String id) {
+        UserInfoDB userInfoDB = userInfoDao.deleteUserInfo(id);
+        return new UserInfoGetResponse(userInfoDB);
+    }
+
     private UserInfoDB createUserInfo(String id) {
         return userInfoDao.createUserInfo(id);
     }

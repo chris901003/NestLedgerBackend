@@ -27,4 +27,6 @@ public interface UserInfoDao {
     UserInfoDB createUserInfo(String id);
 
     UserInfoDB updateUserInfo(UserInfoUpdateRequestData data) throws IllegalAccessException;
+
+    UserInfoDB deleteUserInfo(String id);
 }

@@ -74,4 +74,10 @@ public class UserInfoAPIController {
         }
         return Response.success(userInfoService.updateUserInfo(data));
     }
+
+    @DeleteMapping("/delete")
+    public Response<UserInfoGetResponse> deleteUserInfo() {
+        String uid = UserContext.getUid();
+        return Response.success(userInfoService.deleteUserInfo(uid));
+    }
 }

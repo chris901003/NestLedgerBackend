@@ -20,4 +20,5 @@ public interface UserInfoService {
     List<UserInfoGetResponse> getMultipleUserInfoById(List<String> ids);
     UserInfoGetResponse getUserInfoByEmail(String email);
     UserInfoGetResponse updateUserInfo(UserInfoUpdateRequestData data) throws IllegalAccessException;
+    UserInfoGetResponse deleteUserInfo(String id);
 }
