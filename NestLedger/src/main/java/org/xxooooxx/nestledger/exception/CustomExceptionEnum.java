@@ -19,7 +19,9 @@ public enum CustomExceptionEnum {
     LEDGER_NOT_FOUND(3001, "Ledger not found"),
     UNAUTHORIZED_GET_LEDGER(3002, "Unauthorized get ledger"),
     INVALID_CHANGE_MAIN_LEDGER_TITLE(3003, "Invalid change main ledger title"),
-    UNAUTHORIZED_UPDATE_LEDGER(3004, "Unauthorized update ledger"),;
+    UNAUTHORIZED_UPDATE_LEDGER(3004, "Unauthorized update ledger"),
+    UNAUTHORIZED_DELETE_LEDGER(3005, "Unauthorized delete ledger"),
+    INVALID_DELETE_MAIN_LEDGER(3006, "Invalid delete main ledger"),;
 
     @Getter
     final private Integer code;

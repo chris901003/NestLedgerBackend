@@ -85,4 +85,20 @@ public class LedgerDaoImpl implements LedgerDao {
         }
         return null;
     }
+
+    @Override
+    public void deleteLedger(String ledgerId) {
+        LedgerDB ledgerDB = getLedger(ledgerId);
+        if (ledgerDB == null) {
+            throw new CustomException(CustomExceptionEnum.LEDGER_NOT_FOUND);
+        }
+        String uid = UserContext.getUid();
+        if (!ledgerDB.getUserIds().contains(uid)) {
+            throw new CustomException(CustomExceptionEnum.UNAUTHORIZED_DELETE_LEDGER);
+        }
+        if (ledgerDB.getTitle().startsWith("[Main]")) {
+            throw new CustomException(CustomExceptionEnum.INVALID_DELETE_MAIN_LEDGER);
+        }
+        mongoTemplate.remove(ledgerDB);
+    }
 }

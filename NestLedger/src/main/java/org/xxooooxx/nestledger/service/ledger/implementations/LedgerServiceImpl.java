@@ -41,4 +41,9 @@ public class LedgerServiceImpl implements LedgerService {
         LedgerDB ledgerDB = ledgerDao.updateLedger(updateData);
         return new LedgerGetResponseData(ledgerDB);
     }
+
+    @Override
+    public void deleteLedger(String ledgerId) {
+        ledgerDao.deleteLedger(ledgerId);
+    }
 }

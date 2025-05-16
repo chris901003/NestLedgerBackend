@@ -53,4 +53,10 @@ public class LedgerAPIController {
     ) throws IllegalAccessException {
         return Response.success(ledgerService.updateLedger(updateData));
     }
+
+    @DeleteMapping("/delete")
+    public Response<Void> deleteLedger(@RequestParam String ledgerId) {
+        ledgerService.deleteLedger(ledgerId);
+        return Response.success(null);
+    }
 }

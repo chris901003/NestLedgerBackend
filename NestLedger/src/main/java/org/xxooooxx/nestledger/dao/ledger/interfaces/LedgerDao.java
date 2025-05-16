@@ -17,4 +17,5 @@ public interface LedgerDao {
     LedgerDB createLedger(LedgerCreateRequestData createData);
     LedgerDB getLedger(String ledgerId);
     LedgerDB updateLedger(LedgerUpdateRequestData data) throws IllegalAccessException;
+    void deleteLedger(String ledgerId);
 }
