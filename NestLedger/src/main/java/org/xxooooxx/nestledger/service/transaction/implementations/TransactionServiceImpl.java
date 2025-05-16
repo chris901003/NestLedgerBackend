@@ -75,6 +75,18 @@ public class TransactionServiceImpl implements TransactionService {
         return new TransactionGetResponseData(updatedTransactionDB);
     }
 
+    @Override
+    public void deleteTransaction(String id) {
+        TransactionDB transactionDB = transactionDao.getTransaction(id);
+        checkIsInUserInLedger(transactionDB.getLedgerId());
+        if (Objects.equals(transactionDB.getType(), "income")) {
+            ledgerDao.incrementTotalIncome(transactionDB.getLedgerId(), -transactionDB.getMoney());
+        } else {
+            ledgerDao.incrementTotalExpense(transactionDB.getLedgerId(), -transactionDB.getMoney());
+        }
+        transactionDao.deleteTransaction(id);
+    }
+
     private void checkIsInUserInLedger(String ledgerId) {
         LedgerDB ledgerDB = ledgerDao.getLedger(ledgerId);
         if (ledgerDB == null) {

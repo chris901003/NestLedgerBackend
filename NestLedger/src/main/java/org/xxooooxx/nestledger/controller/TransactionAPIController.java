@@ -48,4 +48,12 @@ public class TransactionAPIController {
         TransactionGetResponseData responseData = transactionService.updateTransaction(data);
         return Response.success(responseData);
     }
+
+    @DeleteMapping("/delete")
+    public Response<Void> deleteTransaction(
+            @RequestParam String transactionId
+    ) {
+        transactionService.deleteTransaction(transactionId);
+        return Response.success(null);
+    }
 }

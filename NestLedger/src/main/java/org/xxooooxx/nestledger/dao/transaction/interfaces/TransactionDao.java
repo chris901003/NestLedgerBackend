@@ -17,4 +17,5 @@ public interface TransactionDao {
     TransactionDB createTransaction(TransactionCreateRequestData data);
     TransactionDB getTransaction(String transactionId);
     TransactionDB updateTransaction(TransactionUpdateRequestData data) throws IllegalAccessException;
+    void deleteTransaction(String transactionId);
 }

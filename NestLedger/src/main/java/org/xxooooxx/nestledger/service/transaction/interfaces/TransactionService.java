@@ -17,4 +17,5 @@ public interface TransactionService {
     TransactionGetResponseData createTransaction(TransactionCreateRequestData data);
     TransactionGetResponseData getTransaction(String transactionId);
     TransactionGetResponseData updateTransaction(TransactionUpdateRequestData data) throws IllegalAccessException;
+    void deleteTransaction(String transactionId);
 }

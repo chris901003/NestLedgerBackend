@@ -66,4 +66,13 @@ public class TransactionDaoImpl implements TransactionDao {
         }
         return null;
     }
+
+    @Override
+    public void deleteTransaction(String id) {
+        Query query = new Query(Criteria.where("_id").is(id));
+        TransactionDB transactionDB = mongoTemplate.findAndRemove(query, TransactionDB.class);
+        if (transactionDB == null) {
+            throw new CustomException(CustomExceptionEnum.TRANSACTION_NOT_FOUND);
+        }
+    }
 }
