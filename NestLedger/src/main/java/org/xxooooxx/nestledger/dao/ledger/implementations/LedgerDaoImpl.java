@@ -60,7 +60,7 @@ public class LedgerDaoImpl implements LedgerDao {
     }
 
     @Override
-    public LedgerDB updateLedger(LedgerUpdateRequestData data) throws IllegalAccessException {
+    public LedgerDB updateLedger(LedgerUpdateRequestData data, boolean withCheckAuth) throws IllegalAccessException {
         // Block update title when ledger is main ledger
         LedgerDB ledgerDB = getLedger(data.get_id());
         if (ledgerDB == null) {
@@ -73,9 +73,11 @@ public class LedgerDaoImpl implements LedgerDao {
         }
 
         // Block unauthorized update
-        String uid = UserContext.getUid();
-        if (!ledgerDB.getUserIds().contains(uid)) {
-            throw new CustomException(CustomExceptionEnum.UNAUTHORIZED_UPDATE_LEDGER);
+        if (withCheckAuth) {
+            String uid = UserContext.getUid();
+            if (!ledgerDB.getUserIds().contains(uid)) {
+                throw new CustomException(CustomExceptionEnum.UNAUTHORIZED_UPDATE_LEDGER);
+            }
         }
 
         Query query = new Query(Criteria.where("_id").is(data.get_id()));

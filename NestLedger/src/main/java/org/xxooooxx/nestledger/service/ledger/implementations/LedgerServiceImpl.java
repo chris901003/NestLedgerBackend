@@ -47,7 +47,7 @@ public class LedgerServiceImpl implements LedgerService {
 
     @Override
     public LedgerGetResponseData updateLedger(LedgerUpdateRequestData updateData) throws IllegalAccessException {
-        LedgerDB ledgerDB = ledgerDao.updateLedger(updateData);
+        LedgerDB ledgerDB = ledgerDao.updateLedger(updateData, true);
         return new LedgerGetResponseData(ledgerDB);
     }
 

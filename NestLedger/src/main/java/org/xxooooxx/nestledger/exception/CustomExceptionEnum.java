@@ -39,7 +39,11 @@ public enum CustomExceptionEnum {
     // Ledger Invite
     UNAUTHORIZED_CREATE_LEDGER_INVITE(6001, "Unauthorized create ledger invite"),
     ALREADY_IN_LEDGER(6002, "Already in ledger"),
-    INVALID_LEDGER_INVITE_GET(6003, "Invalid ledger invite get"),;
+    INVALID_LEDGER_INVITE_GET(6003, "Invalid ledger invite get"),
+    LEDGER_INVITE_NOT_FOUND(6004, "Ledger invite not found"),
+    FAILED_TO_DELETE_LEDGER_INVITE_UPDATE_LEDGER(6005, "Failed to delete ledger invite (update ledger)"),
+    FAILED_TO_DELETE_LEDGER_INVITE_UPDATE_USER(6006, "Failed to delete ledger invite (update user)"),
+    UNAUTHORIZED_ACCEPT_LEDGER_INVITE(6007, "Unauthorized accept ledger invite"),;
 
     @Getter
     final private Integer code;

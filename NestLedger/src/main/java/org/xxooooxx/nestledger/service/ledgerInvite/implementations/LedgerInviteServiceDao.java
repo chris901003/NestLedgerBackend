@@ -11,6 +11,7 @@ package org.xxooooxx.nestledger.service.ledgerInvite.implementations;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.xxooooxx.nestledger.dao.ledger.interfaces.LedgerDao;
 import org.xxooooxx.nestledger.dao.ledgerInvite.interfaces.LedgerInviteDao;
 import org.xxooooxx.nestledger.dao.userinfo.interfaces.UserInfoDao;
@@ -20,9 +21,12 @@ import org.xxooooxx.nestledger.service.ledgerInvite.interfaces.LedgerInviteServi
 import org.xxooooxx.nestledger.to.LedgerDB;
 import org.xxooooxx.nestledger.to.LedgerInviteDB;
 import org.xxooooxx.nestledger.to.UserInfoDB;
+import org.xxooooxx.nestledger.utility.UserContext;
+import org.xxooooxx.nestledger.vo.ledger.request.LedgerUpdateRequestData;
 import org.xxooooxx.nestledger.vo.ledgerInvite.request.LedgerInviteCreateRequestData;
 import org.xxooooxx.nestledger.vo.ledgerInvite.request.LedgerInviteGetRequestData;
 import org.xxooooxx.nestledger.vo.ledgerInvite.response.LedgerInviteGetResponseData;
+import org.xxooooxx.nestledger.vo.userinfo.request.UserInfoUpdateRequestData;
 
 import java.util.List;
 
@@ -68,5 +72,55 @@ public class LedgerInviteServiceDao implements LedgerInviteService {
         }
         List<LedgerInviteDB> ledgerInviteDBList = ledgerInviteDao.getLedgerInvite(data);
         return ledgerInviteDBList.stream().map(LedgerInviteGetResponseData::new).toList();
+    }
+
+    @Override
+    @Transactional
+    public void deleteLedgerInvite(String inviteId, boolean accept) {
+        LedgerInviteDB ledgerInviteDB = ledgerInviteDao.getLedgerInviteById(inviteId);
+        if (ledgerInviteDB == null) {
+            throw new CustomException(CustomExceptionEnum.LEDGER_INVITE_NOT_FOUND);
+        }
+
+        String uid = UserContext.getUid();
+        ledgerInviteDao.deleteLedgerInvite(inviteId);
+        if (accept) {
+            if (!ledgerInviteDB.getReceiveUserId().equals(uid)) {
+                throw new CustomException(CustomExceptionEnum.UNAUTHORIZED_ACCEPT_LEDGER_INVITE);
+            }
+            // Update ledger
+            LedgerDB ledgerDB = ledgerDao.getLedger(ledgerInviteDB.getLedgerId());
+            if (ledgerDB == null) {
+                throw new CustomException(CustomExceptionEnum.LEDGER_NOT_FOUND);
+            }
+            LedgerUpdateRequestData ledgerUpdateRequestData = new LedgerUpdateRequestData();
+            ledgerUpdateRequestData.set_id(ledgerDB.get_id());
+            ledgerUpdateRequestData.setUserIds(ledgerDB.getUserIds());
+            ledgerUpdateRequestData.getUserIds().add(ledgerInviteDB.getReceiveUserId());
+            try {
+                ledgerDao.updateLedger(ledgerUpdateRequestData, false);
+            } catch (IllegalAccessException e) {
+                throw new CustomException(CustomExceptionEnum.FAILED_TO_DELETE_LEDGER_INVITE_UPDATE_LEDGER);
+            }
+
+            // Update receiver user info
+            UserInfoDB userInfoDB = userInfoDao.getUserInfoById(ledgerInviteDB.getReceiveUserId());
+            if (userInfoDB == null) {
+                throw new CustomException(CustomExceptionEnum.USER_INFO_NOT_FOUND);
+            }
+            if (userInfoDB.getIsDelete()) {
+                throw new CustomException(CustomExceptionEnum.USER_INFO_HAS_BEEN_DELETED);
+            }
+            UserInfoUpdateRequestData userInfoUpdateRequestData = new UserInfoUpdateRequestData();
+            userInfoUpdateRequestData.setId(ledgerInviteDB.getReceiveUserId());
+            userInfoUpdateRequestData.setLedgerIds(userInfoDB.getLedgerIds());
+            userInfoUpdateRequestData.getLedgerIds().add(ledgerDB.get_id());
+            try {
+                System.out.println("Ledgers: " + userInfoUpdateRequestData.getLedgerIds());
+                userInfoDao.updateUserInfo(userInfoUpdateRequestData);
+            } catch (IllegalAccessException e) {
+                throw new CustomException(CustomExceptionEnum.FAILED_TO_DELETE_LEDGER_INVITE_UPDATE_USER);
+            }
+        }
     }
 }

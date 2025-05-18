@@ -36,6 +36,11 @@ public class LedgerInviteDaoImpl implements LedgerInviteDao {
         return mongoTemplate.insert(ledgerInviteDB);
     }
 
+    public LedgerInviteDB getLedgerInviteById(String inviteId) {
+        Query query = new Query(Criteria.where("_id").is(inviteId));
+        return mongoTemplate.findOne(query, LedgerInviteDB.class);
+    }
+
     public List<LedgerInviteDB> getLedgerInvite(LedgerInviteGetRequestData data) {
         Criteria criteria = new Criteria();
         if (data.getLedgerId() != null) {
@@ -47,5 +52,10 @@ public class LedgerInviteDaoImpl implements LedgerInviteDao {
 
         Query query = new Query(criteria);
         return mongoTemplate.find(query, LedgerInviteDB.class);
+    }
+
+    public void deleteLedgerInvite(String inviteId) {
+        Query query = new Query(Criteria.where("_id").is(inviteId));
+        mongoTemplate.remove(query, LedgerInviteDB.class);
     }
 }

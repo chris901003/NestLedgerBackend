@@ -42,4 +42,13 @@ public class LedgerInviteAPIController {
         List<LedgerInviteGetResponseData> response = ledgerInviteService.getLedgerInvite(data);
         return Response.success(response);
     }
+
+    @DeleteMapping("/delete")
+    public Response<Void> deleteLedgerInvite(
+            @RequestParam String inviteId,
+            @RequestParam boolean accept
+    ) {
+        ledgerInviteService.deleteLedgerInvite(inviteId, accept);
+        return Response.success(null);
+    }
 }

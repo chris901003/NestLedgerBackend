@@ -9,4 +9,5 @@ import java.util.List;
 public interface LedgerInviteService {
     LedgerInviteGetResponseData createLedgerInvite(LedgerInviteCreateRequestData data);
     List<LedgerInviteGetResponseData> getLedgerInvite(LedgerInviteGetRequestData data);
+    void deleteLedgerInvite(String inviteId, boolean accept);
 }

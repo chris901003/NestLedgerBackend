@@ -8,5 +8,7 @@ import java.util.List;
 
 public interface LedgerInviteDao {
     LedgerInviteDB createLedgerInvite(LedgerInviteCreateRequestData data);
+    LedgerInviteDB getLedgerInviteById(String inviteId);
     List<LedgerInviteDB> getLedgerInvite(LedgerInviteGetRequestData data);
+    void deleteLedgerInvite(String inviteId);
 }
