@@ -101,6 +101,7 @@ public class TransactionServiceImpl implements TransactionService {
         } else {
             ledgerDao.incrementTotalExpense(transactionDB.getLedgerId(), -transactionDB.getMoney());
         }
+        tagDao.incrementTagUsingCount(transactionDB.getTagId(), -1);
         transactionDao.deleteTransaction(id);
     }
 
