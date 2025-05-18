@@ -41,7 +41,7 @@ public class UserInfoAPIController {
     private UserInfoService userInfoService;
 
     @GetMapping("/login")
-    public Response<UserInfoGetResponse> login() {
+    public Response<UserInfoGetResponse> login() throws IllegalAccessException {
         String uid = UserContext.getUid();
         return Response.success(userInfoService.createUserInfoIfNeeded(uid));
     }

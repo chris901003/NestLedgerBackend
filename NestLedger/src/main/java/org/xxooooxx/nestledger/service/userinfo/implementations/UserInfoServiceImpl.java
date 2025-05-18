@@ -19,6 +19,7 @@ import org.xxooooxx.nestledger.dao.userinfo.interfaces.UserInfoDao;
 import org.xxooooxx.nestledger.exception.CustomException;
 import org.xxooooxx.nestledger.exception.CustomExceptionEnum;
 import org.xxooooxx.nestledger.service.userinfo.interfaces.UserInfoService;
+import org.xxooooxx.nestledger.to.LedgerDB;
 import org.xxooooxx.nestledger.to.UserInfoDB;
 import org.xxooooxx.nestledger.vo.ledger.request.LedgerCreateRequestData;
 import org.xxooooxx.nestledger.vo.userinfo.request.UserInfoUpdateRequestData;
@@ -26,6 +27,7 @@ import org.xxooooxx.nestledger.vo.userinfo.response.UserInfoGetResponse;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 
 @Slf4j
@@ -40,7 +42,7 @@ public class UserInfoServiceImpl implements UserInfoService {
 
     @Transactional
     @Override
-    public UserInfoGetResponse createUserInfoIfNeeded(String id) {
+    public UserInfoGetResponse createUserInfoIfNeeded(String id) throws IllegalAccessException {
         try {
             UserInfoDB existingUserInfo = userInfoDao.getUserInfoById(id);
             log.info("User info already exists: {}", id);
@@ -54,8 +56,13 @@ public class UserInfoServiceImpl implements UserInfoService {
             ledgerCreateRequestData.setTitle("[Main]:" + id);
             ledgerCreateRequestData.setUserId(id);
             ledgerCreateRequestData.setVersion(1);
-            ledgerDao.createLedger(ledgerCreateRequestData);
-            return new UserInfoGetResponse(newUserInfo);
+            LedgerDB ledgerDB = ledgerDao.createLedger(ledgerCreateRequestData);
+
+            UserInfoUpdateRequestData update = new UserInfoUpdateRequestData();
+            update.setLedgerIds(new ArrayList<>());
+            update.setId(id);
+            update.getLedgerIds().add(ledgerDB.get_id());
+            return updateUserInfo(update);
         }
     }
 

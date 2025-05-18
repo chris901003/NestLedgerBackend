@@ -18,7 +18,7 @@ import java.math.BigDecimal;
 import java.util.List;
 
 public interface UserInfoService {
-    UserInfoGetResponse createUserInfoIfNeeded(String id);
+    UserInfoGetResponse createUserInfoIfNeeded(String id) throws IllegalAccessException;
     UserInfoGetResponse getUserInfoById(String id);
     List<UserInfoGetResponse> getMultipleUserInfoById(List<String> ids);
     UserInfoGetResponse getUserInfoByEmail(String email);
