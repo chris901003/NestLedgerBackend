@@ -9,12 +9,16 @@
  */
 package org.xxooooxx.nestledger.dao.tag.implementations;
 
+import com.mongodb.client.result.UpdateResult;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
+import org.springframework.data.mongodb.core.query.Update;
 import org.springframework.stereotype.Component;
 import org.xxooooxx.nestledger.dao.tag.interfaces.TagDao;
+import org.xxooooxx.nestledger.exception.CustomException;
+import org.xxooooxx.nestledger.exception.CustomExceptionEnum;
 import org.xxooooxx.nestledger.to.TagDB;
 import org.xxooooxx.nestledger.vo.tag.request.TagCreateRequestData;
 
@@ -36,5 +40,14 @@ public class TagDaoImpl implements TagDao {
 
     public TagDB getTag(String id) {
         return mongoTemplate.findOne(Query.query(Criteria.where("_id").is(id)), TagDB.class);
+    }
+
+    public void incrementTagUsingCount(String id, int count) {
+        Query query = Query.query(Criteria.where("_id").is(id));
+        Update update = new Update().inc("usingCount", count);
+        UpdateResult result = mongoTemplate.updateFirst(query, update, TagDB.class);
+        if (result.getModifiedCount() == 0) {
+            throw new CustomException(CustomExceptionEnum.TAG_NOT_FOUND);
+        }
     }
 }

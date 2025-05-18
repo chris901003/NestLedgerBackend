@@ -13,11 +13,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.xxooooxx.nestledger.dao.ledger.interfaces.LedgerDao;
+import org.xxooooxx.nestledger.dao.tag.interfaces.TagDao;
 import org.xxooooxx.nestledger.dao.transaction.interfaces.TransactionDao;
 import org.xxooooxx.nestledger.exception.CustomException;
 import org.xxooooxx.nestledger.exception.CustomExceptionEnum;
 import org.xxooooxx.nestledger.service.transaction.interfaces.TransactionService;
 import org.xxooooxx.nestledger.to.LedgerDB;
+import org.xxooooxx.nestledger.to.TagDB;
 import org.xxooooxx.nestledger.to.TransactionDB;
 import org.xxooooxx.nestledger.utility.UserContext;
 import org.xxooooxx.nestledger.vo.transaction.request.TransactionCreateRequestData;
@@ -37,6 +39,9 @@ public class TransactionServiceImpl implements TransactionService {
     @Autowired
     private LedgerDao ledgerDao;
 
+    @Autowired
+    private TagDao tagDao;
+
     @Transactional
     @Override
     public TransactionGetResponseData createTransaction(TransactionCreateRequestData data) {
@@ -47,6 +52,15 @@ public class TransactionServiceImpl implements TransactionService {
         } else {
             ledgerDao.incrementTotalExpense(data.getLedgerId(), data.getMoney());
         }
+
+        TagDB tagDB = tagDao.getTag(data.getTagId());
+        if (tagDB == null) {
+            throw new CustomException(CustomExceptionEnum.TAG_NOT_FOUND);
+        }
+        if (!tagDB.getLedgerId().equals(data.getLedgerId())) {
+            throw new CustomException(CustomExceptionEnum.TAG_NOT_IN_LEDGER);
+        }
+        tagDao.incrementTagUsingCount(data.getTagId(), 1);
         return new TransactionGetResponseData(transactionDB);
     }
 

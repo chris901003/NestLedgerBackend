@@ -26,6 +26,7 @@ public enum CustomExceptionEnum {
     // Transaction
     TRANSACTION_NOT_FOUND(4001, "Transaction not found"),
     UNAUTHORIZED_OPERATION_ON_TRANSACTION(4002, "Unauthorized operation on transaction"),
+    TAG_NOT_IN_LEDGER(4003, "Tag not in ledger"),
 
     // Tag
     TAG_REFERENCE_LEDGER_NOT_FOUND(5001, "Tag reference ledger not found"),
