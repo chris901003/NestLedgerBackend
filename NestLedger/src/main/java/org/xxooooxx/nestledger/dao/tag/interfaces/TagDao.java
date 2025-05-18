@@ -21,5 +21,6 @@ public interface TagDao {
     TagDB getTag(String id);
     List<TagDB> queryTags(TagQueryRequestData data);
     TagDB updateTag(TagUpdateRequestData data) throws IllegalAccessException;
+    void deleteTag(String tagId);
     void incrementTagUsingCount(String id, int count);
 }

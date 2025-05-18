@@ -75,6 +75,15 @@ public class TagServiceImpl implements TagService {
         return new TagGetResponseData(tagDB);
     }
 
+    public void deleteTag(String tagId) {
+        TagDB tagDB = tagDao.getTag(tagId);
+        if (tagDB == null) {
+            throw new CustomException(CustomExceptionEnum.TAG_NOT_FOUND);
+        }
+        checkOperationValid(tagDB.getLedgerId());
+        tagDao.deleteTag(tagId);
+    }
+
     private void checkOperationValid(String ledgerId) {
         LedgerDB ledger = ledgerDao.getLedger(ledgerId);
         if (ledger == null) {

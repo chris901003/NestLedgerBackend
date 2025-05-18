@@ -82,6 +82,18 @@ public class TagDaoImpl implements TagDao {
         return null;
     }
 
+    public void deleteTag(String tagId) {
+        Query query = Query.query(Criteria.where("_id").is(tagId));
+        TagDB tagDB = mongoTemplate.findOne(query, TagDB.class);
+        if (tagDB == null) {
+            throw new CustomException(CustomExceptionEnum.TAG_NOT_FOUND);
+        }
+        if (tagDB.getUsingCount() > 0) {
+            throw new CustomException(CustomExceptionEnum.TAG_STILL_IN_USE);
+        }
+        mongoTemplate.remove(query, TagDB.class);
+    }
+
     public void incrementTagUsingCount(String id, int count) {
         Query query = Query.query(Criteria.where("_id").is(id));
         Update update = new Update().inc("usingCount", count);

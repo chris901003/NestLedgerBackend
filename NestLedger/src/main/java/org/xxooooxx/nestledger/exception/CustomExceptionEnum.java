@@ -32,7 +32,8 @@ public enum CustomExceptionEnum {
     TAG_REFERENCE_LEDGER_NOT_FOUND(5001, "Tag reference ledger not found"),
     UNAUTHORIZED_OPERATION_TAG(5002, "Unauthorized operation tag"),
     TAG_NOT_FOUND(5003, "Tag not found"),
-    TAG_UPDATE_FAILED(5004, "Tag update failed"),;
+    TAG_UPDATE_FAILED(5004, "Tag update failed"),
+    TAG_STILL_IN_USE(5005, "Tag still in use"),;
 
     @Getter
     final private Integer code;

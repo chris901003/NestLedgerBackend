@@ -12,4 +12,5 @@ public interface TagService {
     TagGetResponseData getTag(String id);
     List<TagGetResponseData> queryTags(TagQueryRequestData data);
     TagGetResponseData updateTag(TagUpdateRequestData data);
+    void deleteTag(String tagId);
 }

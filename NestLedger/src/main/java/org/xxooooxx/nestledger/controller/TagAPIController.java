@@ -51,4 +51,10 @@ public class TagAPIController {
         TagGetResponseData tag = tagService.updateTag(data);
         return Response.success(tag);
     }
+
+    @DeleteMapping("/delete")
+    public Response<Void> deleteTag(@RequestParam String tagId) {
+        tagService.deleteTag(tagId);
+        return Response.success(null);
+    }
 }
