@@ -12,6 +12,7 @@ package org.xxooooxx.nestledger.dao.tag.interfaces;
 import org.xxooooxx.nestledger.to.TagDB;
 import org.xxooooxx.nestledger.vo.tag.request.TagCreateRequestData;
 import org.xxooooxx.nestledger.vo.tag.request.TagQueryRequestData;
+import org.xxooooxx.nestledger.vo.tag.request.TagUpdateRequestData;
 
 import java.util.List;
 
@@ -19,5 +20,6 @@ public interface TagDao {
     TagDB createTag(TagCreateRequestData data);
     TagDB getTag(String id);
     List<TagDB> queryTags(TagQueryRequestData data);
+    TagDB updateTag(TagUpdateRequestData data) throws IllegalAccessException;
     void incrementTagUsingCount(String id, int count);
 }

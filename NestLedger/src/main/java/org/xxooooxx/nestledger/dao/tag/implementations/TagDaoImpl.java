@@ -11,6 +11,7 @@ package org.xxooooxx.nestledger.dao.tag.implementations;
 
 import com.mongodb.client.result.UpdateResult;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.mongodb.core.FindAndModifyOptions;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
@@ -20,8 +21,10 @@ import org.xxooooxx.nestledger.dao.tag.interfaces.TagDao;
 import org.xxooooxx.nestledger.exception.CustomException;
 import org.xxooooxx.nestledger.exception.CustomExceptionEnum;
 import org.xxooooxx.nestledger.to.TagDB;
+import org.xxooooxx.nestledger.utility.MongoDbUpdateUtility;
 import org.xxooooxx.nestledger.vo.tag.request.TagCreateRequestData;
 import org.xxooooxx.nestledger.vo.tag.request.TagQueryRequestData;
+import org.xxooooxx.nestledger.vo.tag.request.TagUpdateRequestData;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -66,6 +69,17 @@ public class TagDaoImpl implements TagDao {
         } else {
             return mongoTemplate.findAll(TagDB.class);
         }
+    }
+
+    public TagDB updateTag(TagUpdateRequestData data) throws IllegalAccessException {
+        Query query = Query.query(Criteria.where("_id").is(data.get_id()));
+        Update update = MongoDbUpdateUtility.getFullUpdate(data);
+
+        if (!update.getUpdateObject().isEmpty()) {
+            FindAndModifyOptions options = new FindAndModifyOptions().returnNew(true).upsert(false);
+            return mongoTemplate.findAndModify(query, update, options, TagDB.class);
+        }
+        return null;
     }
 
     public void incrementTagUsingCount(String id, int count) {

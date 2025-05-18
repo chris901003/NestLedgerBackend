@@ -21,6 +21,7 @@ import org.xxooooxx.nestledger.to.TagDB;
 import org.xxooooxx.nestledger.utility.UserContext;
 import org.xxooooxx.nestledger.vo.tag.request.TagCreateRequestData;
 import org.xxooooxx.nestledger.vo.tag.request.TagQueryRequestData;
+import org.xxooooxx.nestledger.vo.tag.request.TagUpdateRequestData;
 import org.xxooooxx.nestledger.vo.tag.response.TagGetResponseData;
 
 import java.util.List;
@@ -57,6 +58,21 @@ public class TagServiceImpl implements TagService {
         return tagDBs.stream()
                 .map(TagGetResponseData::new)
                 .toList();
+    }
+
+    public TagGetResponseData updateTag(TagUpdateRequestData data) {
+        TagDB tagDB = tagDao.getTag(data.get_id());
+        if (tagDB == null) {
+            throw new CustomException(CustomExceptionEnum.TAG_NOT_FOUND);
+        }
+        checkOperationValid(tagDB.getLedgerId());
+
+        try {
+            tagDB = tagDao.updateTag(data);
+        } catch (IllegalAccessException e) {
+            throw new CustomException(CustomExceptionEnum.TAG_UPDATE_FAILED);
+        }
+        return new TagGetResponseData(tagDB);
     }
 
     private void checkOperationValid(String ledgerId) {

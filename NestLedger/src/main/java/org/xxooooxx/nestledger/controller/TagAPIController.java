@@ -16,6 +16,7 @@ import org.xxooooxx.nestledger.common.Response;
 import org.xxooooxx.nestledger.service.tag.interfaces.TagService;
 import org.xxooooxx.nestledger.vo.tag.request.TagCreateRequestData;
 import org.xxooooxx.nestledger.vo.tag.request.TagQueryRequestData;
+import org.xxooooxx.nestledger.vo.tag.request.TagUpdateRequestData;
 import org.xxooooxx.nestledger.vo.tag.response.TagGetResponseData;
 
 import java.util.List;
@@ -43,5 +44,11 @@ public class TagAPIController {
     public Response<List<TagGetResponseData>> queryTag(@RequestBody @Valid TagQueryRequestData data) {
         List<TagGetResponseData> tags = tagService.queryTags(data);
         return Response.success(tags);
+    }
+
+    @PatchMapping("/update")
+    public Response<TagGetResponseData> updateTag(@RequestBody @Valid TagUpdateRequestData data) {
+        TagGetResponseData tag = tagService.updateTag(data);
+        return Response.success(tag);
     }
 }
