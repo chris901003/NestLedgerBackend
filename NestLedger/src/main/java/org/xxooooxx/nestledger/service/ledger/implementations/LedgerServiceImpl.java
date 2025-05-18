@@ -11,7 +11,9 @@ package org.xxooooxx.nestledger.service.ledger.implementations;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.xxooooxx.nestledger.dao.ledger.interfaces.LedgerDao;
+import org.xxooooxx.nestledger.dao.tag.interfaces.TagDao;
 import org.xxooooxx.nestledger.service.ledger.interfaces.LedgerService;
 import org.xxooooxx.nestledger.to.LedgerDB;
 import org.xxooooxx.nestledger.vo.ledger.request.LedgerCreateRequestData;
@@ -23,6 +25,9 @@ public class LedgerServiceImpl implements LedgerService {
 
     @Autowired
     private LedgerDao ledgerDao;
+
+    @Autowired
+    private TagDao tagDao;
 
     @Override
     public LedgerGetResponseData createLedger(LedgerCreateRequestData createData) {
@@ -43,7 +48,9 @@ public class LedgerServiceImpl implements LedgerService {
     }
 
     @Override
+    @Transactional
     public void deleteLedger(String ledgerId) {
+        tagDao.deleteTagsByLedgerId(ledgerId);
         ledgerDao.deleteLedger(ledgerId);
     }
 }

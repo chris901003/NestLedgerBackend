@@ -9,11 +9,14 @@
  */
 package org.xxooooxx.nestledger.vo.ledger.request;
 
+import jakarta.validation.constraints.NotNull;
 import lombok.Data;
 
 @Data
 public class LedgerCreateRequestData {
     private String title;
     private String userId;
-    private Integer version;
+
+    @NotNull
+    private Integer version = 1;
 }

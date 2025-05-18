@@ -94,6 +94,11 @@ public class TagDaoImpl implements TagDao {
         mongoTemplate.remove(query, TagDB.class);
     }
 
+    public void deleteTagsByLedgerId(String ledgerId) {
+        Query query = Query.query(Criteria.where("ledgerId").is(ledgerId));
+        mongoTemplate.remove(query, TagDB.class);
+    }
+
     public void incrementTagUsingCount(String id, int count) {
         Query query = Query.query(Criteria.where("_id").is(id));
         Update update = new Update().inc("usingCount", count);
