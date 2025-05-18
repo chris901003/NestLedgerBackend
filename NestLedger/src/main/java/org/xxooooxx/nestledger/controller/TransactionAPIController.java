@@ -15,8 +15,11 @@ import org.springframework.web.bind.annotation.*;
 import org.xxooooxx.nestledger.common.Response;
 import org.xxooooxx.nestledger.service.transaction.interfaces.TransactionService;
 import org.xxooooxx.nestledger.vo.transaction.request.TransactionCreateRequestData;
+import org.xxooooxx.nestledger.vo.transaction.request.TransactionQueryRequestData;
 import org.xxooooxx.nestledger.vo.transaction.request.TransactionUpdateRequestData;
 import org.xxooooxx.nestledger.vo.transaction.response.TransactionGetResponseData;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/v1/transaction")
@@ -55,5 +58,13 @@ public class TransactionAPIController {
     ) {
         transactionService.deleteTransaction(transactionId);
         return Response.success(null);
+    }
+
+    @PostMapping("/query")
+    public Response<List<TransactionGetResponseData>> queryTransaction(
+            @RequestBody @Valid TransactionQueryRequestData data
+    ) {
+        List<TransactionGetResponseData> responseData = transactionService.queryTransactions(data);
+        return Response.success(responseData);
     }
 }

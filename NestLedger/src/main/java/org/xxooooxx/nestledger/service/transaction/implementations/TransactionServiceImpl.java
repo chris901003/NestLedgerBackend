@@ -21,9 +21,11 @@ import org.xxooooxx.nestledger.to.LedgerDB;
 import org.xxooooxx.nestledger.to.TransactionDB;
 import org.xxooooxx.nestledger.utility.UserContext;
 import org.xxooooxx.nestledger.vo.transaction.request.TransactionCreateRequestData;
+import org.xxooooxx.nestledger.vo.transaction.request.TransactionQueryRequestData;
 import org.xxooooxx.nestledger.vo.transaction.request.TransactionUpdateRequestData;
 import org.xxooooxx.nestledger.vo.transaction.response.TransactionGetResponseData;
 
+import java.util.List;
 import java.util.Objects;
 
 @Service
@@ -85,6 +87,15 @@ public class TransactionServiceImpl implements TransactionService {
             ledgerDao.incrementTotalExpense(transactionDB.getLedgerId(), -transactionDB.getMoney());
         }
         transactionDao.deleteTransaction(id);
+    }
+
+    @Override
+    public List<TransactionGetResponseData> queryTransactions(TransactionQueryRequestData data) {
+        checkIsInUserInLedger(data.getLedgerId());
+        List<TransactionDB> transactionDBList = transactionDao.queryTransactions(data);
+        return transactionDBList.stream()
+                .map(TransactionGetResponseData::new)
+                .toList();
     }
 
     private void checkIsInUserInLedger(String ledgerId) {

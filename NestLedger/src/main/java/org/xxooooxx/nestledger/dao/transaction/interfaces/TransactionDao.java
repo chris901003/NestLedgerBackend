@@ -11,11 +11,15 @@ package org.xxooooxx.nestledger.dao.transaction.interfaces;
 
 import org.xxooooxx.nestledger.to.TransactionDB;
 import org.xxooooxx.nestledger.vo.transaction.request.TransactionCreateRequestData;
+import org.xxooooxx.nestledger.vo.transaction.request.TransactionQueryRequestData;
 import org.xxooooxx.nestledger.vo.transaction.request.TransactionUpdateRequestData;
+
+import java.util.List;
 
 public interface TransactionDao {
     TransactionDB createTransaction(TransactionCreateRequestData data);
     TransactionDB getTransaction(String transactionId);
     TransactionDB updateTransaction(TransactionUpdateRequestData data) throws IllegalAccessException;
     void deleteTransaction(String transactionId);
+    List<TransactionDB> queryTransactions(TransactionQueryRequestData data);
 }

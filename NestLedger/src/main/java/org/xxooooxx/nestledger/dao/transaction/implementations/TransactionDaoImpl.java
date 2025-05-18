@@ -10,6 +10,7 @@
 package org.xxooooxx.nestledger.dao.transaction.implementations;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Sort;
 import org.springframework.data.mongodb.core.FindAndModifyOptions;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.query.Criteria;
@@ -22,7 +23,12 @@ import org.xxooooxx.nestledger.exception.CustomExceptionEnum;
 import org.xxooooxx.nestledger.to.TransactionDB;
 import org.xxooooxx.nestledger.utility.MongoDbUpdateUtility;
 import org.xxooooxx.nestledger.vo.transaction.request.TransactionCreateRequestData;
+import org.xxooooxx.nestledger.vo.transaction.request.TransactionQueryRequestData;
 import org.xxooooxx.nestledger.vo.transaction.request.TransactionUpdateRequestData;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.regex.Pattern;
 
 @Component
 public class TransactionDaoImpl implements TransactionDao {
@@ -74,5 +80,46 @@ public class TransactionDaoImpl implements TransactionDao {
         if (transactionDB == null) {
             throw new CustomException(CustomExceptionEnum.TRANSACTION_NOT_FOUND);
         }
+    }
+
+    @Override
+    public List<TransactionDB> queryTransactions(TransactionQueryRequestData data) {
+        List<Criteria> conditions = new ArrayList<>();
+        conditions.add(Criteria.where("ledgerId").is(data.getLedgerId()));
+        if (data.getSearch() != null) {
+            String keyword = ".*" + Pattern.quote(data.getSearch()) + ".*";
+            conditions.add(Criteria.where("title").regex(keyword, "i"));
+        }
+        if (data.getStartDate() != null || data.getEndDate() != null) {
+            Criteria dateCriteria = Criteria.where("date");
+            if (data.getStartDate() != null) {
+                dateCriteria.gte(data.getStartDate());
+            }
+            if (data.getEndDate() != null) {
+                dateCriteria.lte(data.getEndDate());
+            }
+            conditions.add(dateCriteria);
+        }
+        if (data.getTagId() != null) {
+            conditions.add(Criteria.where("tagId").is(data.getTagId()));
+        }
+        if (data.getType() != null) {
+            conditions.add(Criteria.where("type").is(data.getType()));
+        }
+        if (data.getUserId() != null) {
+            conditions.add(Criteria.where("userId").is(data.getUserId()));
+        }
+
+        Query query = new Query();
+        query.addCriteria(new Criteria().andOperator(conditions.toArray(new Criteria[0])));
+
+        if (data.getSortOrder() == 1) {
+            query.with(Sort.by(Sort.Direction.DESC, "date"));
+        } else {
+            query.with(Sort.by(Sort.Direction.ASC, "date"));
+        }
+        query.skip((long) (data.getPage() - 1) * data.getLimit());
+        query.limit(data.getLimit());
+        return mongoTemplate.find(query, TransactionDB.class);
     }
 }
