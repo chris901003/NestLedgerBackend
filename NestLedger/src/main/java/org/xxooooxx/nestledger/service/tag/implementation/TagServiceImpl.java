@@ -20,7 +20,10 @@ import org.xxooooxx.nestledger.to.LedgerDB;
 import org.xxooooxx.nestledger.to.TagDB;
 import org.xxooooxx.nestledger.utility.UserContext;
 import org.xxooooxx.nestledger.vo.tag.request.TagCreateRequestData;
+import org.xxooooxx.nestledger.vo.tag.request.TagQueryRequestData;
 import org.xxooooxx.nestledger.vo.tag.response.TagGetResponseData;
+
+import java.util.List;
 
 @Service
 public class TagServiceImpl implements TagService {
@@ -44,6 +47,16 @@ public class TagServiceImpl implements TagService {
         }
         checkOperationValid(tagDB.getLedgerId());
         return new TagGetResponseData(tagDB);
+    }
+
+    public List<TagGetResponseData> queryTags(TagQueryRequestData data) {
+        if (data.getLedgerId() != null) {
+            checkOperationValid(data.getLedgerId());
+        }
+        List<TagDB> tagDBs = tagDao.queryTags(data);
+        return tagDBs.stream()
+                .map(TagGetResponseData::new)
+                .toList();
     }
 
     private void checkOperationValid(String ledgerId) {

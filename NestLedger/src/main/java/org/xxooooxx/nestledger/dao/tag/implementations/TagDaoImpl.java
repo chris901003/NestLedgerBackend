@@ -21,6 +21,10 @@ import org.xxooooxx.nestledger.exception.CustomException;
 import org.xxooooxx.nestledger.exception.CustomExceptionEnum;
 import org.xxooooxx.nestledger.to.TagDB;
 import org.xxooooxx.nestledger.vo.tag.request.TagCreateRequestData;
+import org.xxooooxx.nestledger.vo.tag.request.TagQueryRequestData;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Component
 public class TagDaoImpl implements TagDao {
@@ -40,6 +44,28 @@ public class TagDaoImpl implements TagDao {
 
     public TagDB getTag(String id) {
         return mongoTemplate.findOne(Query.query(Criteria.where("_id").is(id)), TagDB.class);
+    }
+
+    public List<TagDB> queryTags(TagQueryRequestData data) {
+        List<Criteria> criteria = new ArrayList<>();
+        if (data.getLedgerId() != null) {
+            criteria.add(Criteria.where("ledgerId").is(data.getLedgerId()));
+        }
+        if (data.getSearch() != null) {
+            criteria.add(Criteria.where("label").regex(data.getSearch()));
+        }
+        if (data.getTagId() != null) {
+            criteria.add(Criteria.where("_id").is(data.getTagId()));
+        }
+
+        if (!criteria.isEmpty()) {
+            Query query = new Query(new Criteria().andOperator(criteria.toArray(new Criteria[0])));
+            query.skip((long) (data.getPage() - 1) * data.getLimit());
+            query.limit(data.getLimit());
+            return mongoTemplate.find(query, TagDB.class);
+        } else {
+            return mongoTemplate.findAll(TagDB.class);
+        }
     }
 
     public void incrementTagUsingCount(String id, int count) {

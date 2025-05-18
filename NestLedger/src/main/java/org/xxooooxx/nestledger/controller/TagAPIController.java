@@ -15,7 +15,10 @@ import org.springframework.web.bind.annotation.*;
 import org.xxooooxx.nestledger.common.Response;
 import org.xxooooxx.nestledger.service.tag.interfaces.TagService;
 import org.xxooooxx.nestledger.vo.tag.request.TagCreateRequestData;
+import org.xxooooxx.nestledger.vo.tag.request.TagQueryRequestData;
 import org.xxooooxx.nestledger.vo.tag.response.TagGetResponseData;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/v1/tag")
@@ -34,5 +37,11 @@ public class TagAPIController {
     public Response<TagGetResponseData> getTag(@RequestParam String tagId) {
         TagGetResponseData tag = tagService.getTag(tagId);
         return Response.success(tag);
+    }
+
+    @PostMapping("/query")
+    public Response<List<TagGetResponseData>> queryTag(@RequestBody @Valid TagQueryRequestData data) {
+        List<TagGetResponseData> tags = tagService.queryTags(data);
+        return Response.success(tags);
     }
 }
