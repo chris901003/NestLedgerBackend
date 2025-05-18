@@ -28,8 +28,9 @@ public enum CustomExceptionEnum {
     UNAUTHORIZED_OPERATION_ON_TRANSACTION(4002, "Unauthorized operation on transaction"),
 
     // Tag
-    TAG_CREATE_REFERENCE_LEDGER_NOT_FOUND(5001, "Tag create reference ledger not found"),
-    UNAUTHORIZED_CREATE_TAG(5002, "Unauthorized create tag"),;
+    TAG_REFERENCE_LEDGER_NOT_FOUND(5001, "Tag reference ledger not found"),
+    UNAUTHORIZED_OPERATION_TAG(5002, "Unauthorized operation tag"),
+    TAG_NOT_FOUND(5003, "Tag not found"),;
 
     @Getter
     final private Integer code;

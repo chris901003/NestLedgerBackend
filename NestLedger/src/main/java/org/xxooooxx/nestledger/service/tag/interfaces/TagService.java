@@ -5,4 +5,5 @@ import org.xxooooxx.nestledger.vo.tag.response.TagGetResponseData;
 
 public interface TagService {
     TagGetResponseData createTag(TagCreateRequestData data);
+    TagGetResponseData getTag(String id);
 }

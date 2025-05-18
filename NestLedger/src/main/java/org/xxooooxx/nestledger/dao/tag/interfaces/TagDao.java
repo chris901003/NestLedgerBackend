@@ -14,4 +14,5 @@ import org.xxooooxx.nestledger.vo.tag.request.TagCreateRequestData;
 
 public interface TagDao {
     TagDB createTag(TagCreateRequestData data);
+    TagDB getTag(String id);
 }

@@ -37,15 +37,24 @@ public class TagServiceImpl implements TagService {
         return new TagGetResponseData(tagDB);
     }
 
+    public TagGetResponseData getTag(String id) {
+        TagDB tagDB = tagDao.getTag(id);
+        if (tagDB == null) {
+            throw new CustomException(CustomExceptionEnum.TAG_NOT_FOUND);
+        }
+        checkOperationValid(tagDB.getLedgerId());
+        return new TagGetResponseData(tagDB);
+    }
+
     private void checkOperationValid(String ledgerId) {
         LedgerDB ledger = ledgerDao.getLedger(ledgerId);
         if (ledger == null) {
-            throw new CustomException(CustomExceptionEnum.TAG_CREATE_REFERENCE_LEDGER_NOT_FOUND);
+            throw new CustomException(CustomExceptionEnum.TAG_REFERENCE_LEDGER_NOT_FOUND);
         }
 
         String userId = UserContext.getUid();
         if (!ledger.getUserIds().contains(userId)) {
-            throw new CustomException(CustomExceptionEnum.UNAUTHORIZED_CREATE_TAG);
+            throw new CustomException(CustomExceptionEnum.UNAUTHORIZED_OPERATION_TAG);
         }
     }
 }

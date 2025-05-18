@@ -11,10 +11,7 @@ package org.xxooooxx.nestledger.controller;
 
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.xxooooxx.nestledger.common.Response;
 import org.xxooooxx.nestledger.service.tag.interfaces.TagService;
 import org.xxooooxx.nestledger.vo.tag.request.TagCreateRequestData;
@@ -30,6 +27,12 @@ public class TagAPIController {
     @PostMapping("/create")
     public Response<TagGetResponseData> createTag(@RequestBody @Valid TagCreateRequestData data) {
         TagGetResponseData tag = tagService.createTag(data);
+        return Response.success(tag);
+    }
+
+    @GetMapping("/get")
+    public Response<TagGetResponseData> getTag(@RequestParam String tagId) {
+        TagGetResponseData tag = tagService.getTag(tagId);
         return Response.success(tag);
     }
 }

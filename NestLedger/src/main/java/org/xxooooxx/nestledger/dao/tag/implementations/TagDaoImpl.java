@@ -11,6 +11,8 @@ package org.xxooooxx.nestledger.dao.tag.implementations;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mongodb.core.MongoTemplate;
+import org.springframework.data.mongodb.core.query.Criteria;
+import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.stereotype.Component;
 import org.xxooooxx.nestledger.dao.tag.interfaces.TagDao;
 import org.xxooooxx.nestledger.to.TagDB;
@@ -30,5 +32,9 @@ public class TagDaoImpl implements TagDao {
         tagDB.setUsingCount(0);
         tagDB.setVersion(data.getVersion());
         return mongoTemplate.insert(tagDB);
+    }
+
+    public TagDB getTag(String id) {
+        return mongoTemplate.findOne(Query.query(Criteria.where("_id").is(id)), TagDB.class);
     }
 }
