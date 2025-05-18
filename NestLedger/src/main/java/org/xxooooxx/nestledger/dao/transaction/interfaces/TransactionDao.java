@@ -21,5 +21,6 @@ public interface TransactionDao {
     TransactionDB getTransaction(String transactionId);
     TransactionDB updateTransaction(TransactionUpdateRequestData data) throws IllegalAccessException;
     void deleteTransaction(String transactionId);
+    void deleteTransactionsByLedgerId(String ledgerId);
     List<TransactionDB> queryTransactions(TransactionQueryRequestData data);
 }

@@ -83,6 +83,12 @@ public class TransactionDaoImpl implements TransactionDao {
     }
 
     @Override
+    public void deleteTransactionsByLedgerId(String ledgerId) {
+        Query query = new Query(Criteria.where("ledgerId").is(ledgerId));
+        mongoTemplate.remove(query, TransactionDB.class);
+    }
+
+    @Override
     public List<TransactionDB> queryTransactions(TransactionQueryRequestData data) {
         List<Criteria> conditions = new ArrayList<>();
         conditions.add(Criteria.where("ledgerId").is(data.getLedgerId()));
