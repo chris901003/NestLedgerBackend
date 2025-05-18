@@ -14,6 +14,7 @@ public enum CustomExceptionEnum {
     USER_INFO_NOT_FOUND(2001, "User info not found"),
     UNAUTHORIZED_UPDATE_USER_INFO(2002, "Unauthorized update user info"),
     USER_AVATAR_NOT_FOUND(2003, "User avatar not found"),
+    USER_INFO_HAS_BEEN_DELETED(2004, "User info has been deleted"),
 
     // Ledger
     LEDGER_NOT_FOUND(3001, "Ledger not found"),
@@ -33,7 +34,11 @@ public enum CustomExceptionEnum {
     UNAUTHORIZED_OPERATION_TAG(5002, "Unauthorized operation tag"),
     TAG_NOT_FOUND(5003, "Tag not found"),
     TAG_UPDATE_FAILED(5004, "Tag update failed"),
-    TAG_STILL_IN_USE(5005, "Tag still in use"),;
+    TAG_STILL_IN_USE(5005, "Tag still in use"),
+
+    // Ledger Invite
+    UNAUTHORIZED_CREATE_LEDGER_INVITE(6001, "Unauthorized create ledger invite"),
+    ALREADY_IN_LEDGER(6002, "Already in ledger"),;
 
     @Getter
     final private Integer code;
