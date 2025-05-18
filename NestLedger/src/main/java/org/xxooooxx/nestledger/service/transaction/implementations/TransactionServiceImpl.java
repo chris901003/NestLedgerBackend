@@ -53,13 +53,7 @@ public class TransactionServiceImpl implements TransactionService {
             ledgerDao.incrementTotalExpense(data.getLedgerId(), data.getMoney());
         }
 
-        TagDB tagDB = tagDao.getTag(data.getTagId());
-        if (tagDB == null) {
-            throw new CustomException(CustomExceptionEnum.TAG_NOT_FOUND);
-        }
-        if (!tagDB.getLedgerId().equals(data.getLedgerId())) {
-            throw new CustomException(CustomExceptionEnum.TAG_NOT_IN_LEDGER);
-        }
+        checkTagIsValid(data.getTagId(), data.getLedgerId());
         tagDao.incrementTagUsingCount(data.getTagId(), 1);
         return new TransactionGetResponseData(transactionDB);
     }
@@ -75,6 +69,7 @@ public class TransactionServiceImpl implements TransactionService {
     @Override
     public TransactionGetResponseData updateTransaction(TransactionUpdateRequestData data) throws IllegalAccessException {
         TransactionDB transactionDB = transactionDao.getTransaction(data.get_id());
+        TagDB originalTagDB = tagDao.getTag(transactionDB.getTagId());
         checkIsInUserInLedger(transactionDB.getLedgerId());
         TransactionDB updatedTransactionDB = transactionDao.updateTransaction(data);
 
@@ -87,6 +82,12 @@ public class TransactionServiceImpl implements TransactionService {
             ledgerDao.incrementTotalIncome(transactionDB.getLedgerId(), updatedTransactionDB.getMoney());
         } else {
             ledgerDao.incrementTotalExpense(transactionDB.getLedgerId(), updatedTransactionDB.getMoney());
+        }
+
+        checkTagIsValid(updatedTransactionDB.getTagId(), updatedTransactionDB.getLedgerId());
+        if (!originalTagDB.get_id().equals(updatedTransactionDB.getTagId())) {
+            tagDao.incrementTagUsingCount(originalTagDB.get_id(), -1);
+            tagDao.incrementTagUsingCount(updatedTransactionDB.getTagId(), 1);
         }
         return new TransactionGetResponseData(updatedTransactionDB);
     }
@@ -119,6 +120,16 @@ public class TransactionServiceImpl implements TransactionService {
         }
         if (!ledgerDB.getUserIds().contains(UserContext.getUid())) {
             throw new CustomException(CustomExceptionEnum.UNAUTHORIZED_OPERATION_ON_TRANSACTION);
+        }
+    }
+
+    private void checkTagIsValid(String tagId, String ledgerId) {
+        TagDB tagDB = tagDao.getTag(tagId);
+        if (tagDB == null) {
+            throw new CustomException(CustomExceptionEnum.TAG_NOT_FOUND);
+        }
+        if (!tagDB.getLedgerId().equals(ledgerId)) {
+            throw new CustomException(CustomExceptionEnum.TAG_NOT_IN_LEDGER);
         }
     }
 }
