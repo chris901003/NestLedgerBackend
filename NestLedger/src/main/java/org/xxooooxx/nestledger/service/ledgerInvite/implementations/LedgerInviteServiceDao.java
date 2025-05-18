@@ -21,7 +21,10 @@ import org.xxooooxx.nestledger.to.LedgerDB;
 import org.xxooooxx.nestledger.to.LedgerInviteDB;
 import org.xxooooxx.nestledger.to.UserInfoDB;
 import org.xxooooxx.nestledger.vo.ledgerInvite.request.LedgerInviteCreateRequestData;
+import org.xxooooxx.nestledger.vo.ledgerInvite.request.LedgerInviteGetRequestData;
 import org.xxooooxx.nestledger.vo.ledgerInvite.response.LedgerInviteGetResponseData;
+
+import java.util.List;
 
 @Service
 public class LedgerInviteServiceDao implements LedgerInviteService {
@@ -56,5 +59,14 @@ public class LedgerInviteServiceDao implements LedgerInviteService {
         }
         LedgerInviteDB ledgerInviteDB = ledgerInviteDao.createLedgerInvite(data);
         return new LedgerInviteGetResponseData(ledgerInviteDB);
+    }
+
+    @Override
+    public List<LedgerInviteGetResponseData> getLedgerInvite(LedgerInviteGetRequestData data) {
+        if (data.getLedgerId() == null && data.getReceiveUserId() == null) {
+            throw new CustomException(CustomExceptionEnum.INVALID_LEDGER_INVITE_GET);
+        }
+        List<LedgerInviteDB> ledgerInviteDBList = ledgerInviteDao.getLedgerInvite(data);
+        return ledgerInviteDBList.stream().map(LedgerInviteGetResponseData::new).toList();
     }
 }

@@ -11,10 +11,15 @@ package org.xxooooxx.nestledger.dao.ledgerInvite.implementations;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mongodb.core.MongoTemplate;
+import org.springframework.data.mongodb.core.query.Criteria;
+import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.stereotype.Component;
 import org.xxooooxx.nestledger.dao.ledgerInvite.interfaces.LedgerInviteDao;
 import org.xxooooxx.nestledger.to.LedgerInviteDB;
 import org.xxooooxx.nestledger.vo.ledgerInvite.request.LedgerInviteCreateRequestData;
+import org.xxooooxx.nestledger.vo.ledgerInvite.request.LedgerInviteGetRequestData;
+
+import java.util.List;
 
 @Component
 public class LedgerInviteDaoImpl implements LedgerInviteDao {
@@ -29,5 +34,18 @@ public class LedgerInviteDaoImpl implements LedgerInviteDao {
         ledgerInviteDB.setReceiveUserId(data.getReceiveUserId());
         ledgerInviteDB.setVersion(data.getVersion());
         return mongoTemplate.insert(ledgerInviteDB);
+    }
+
+    public List<LedgerInviteDB> getLedgerInvite(LedgerInviteGetRequestData data) {
+        Criteria criteria = new Criteria();
+        if (data.getLedgerId() != null) {
+            criteria.and("ledgerId").is(data.getLedgerId());
+        }
+        if (data.getReceiveUserId() != null) {
+            criteria.and("receiveUserId").is(data.getReceiveUserId());
+        }
+
+        Query query = new Query(criteria);
+        return mongoTemplate.find(query, LedgerInviteDB.class);
     }
 }

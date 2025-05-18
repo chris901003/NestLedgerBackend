@@ -38,7 +38,8 @@ public enum CustomExceptionEnum {
 
     // Ledger Invite
     UNAUTHORIZED_CREATE_LEDGER_INVITE(6001, "Unauthorized create ledger invite"),
-    ALREADY_IN_LEDGER(6002, "Already in ledger"),;
+    ALREADY_IN_LEDGER(6002, "Already in ledger"),
+    INVALID_LEDGER_INVITE_GET(6003, "Invalid ledger invite get"),;
 
     @Getter
     final private Integer code;
