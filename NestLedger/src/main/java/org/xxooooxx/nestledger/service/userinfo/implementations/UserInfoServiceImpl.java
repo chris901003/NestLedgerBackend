@@ -58,11 +58,8 @@ public class UserInfoServiceImpl implements UserInfoService {
             ledgerCreateRequestData.setVersion(1);
             LedgerDB ledgerDB = ledgerDao.createLedger(ledgerCreateRequestData);
 
-            UserInfoUpdateRequestData update = new UserInfoUpdateRequestData();
-            update.setLedgerIds(new ArrayList<>());
-            update.setId(id);
-            update.getLedgerIds().add(ledgerDB.get_id());
-            return updateUserInfo(update);
+            newUserInfo = userInfoDao.userJoinLedger(id, ledgerDB.get_id());
+            return new UserInfoGetResponse(newUserInfo);
         }
     }
 
