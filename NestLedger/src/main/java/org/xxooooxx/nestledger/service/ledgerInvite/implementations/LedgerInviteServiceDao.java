@@ -10,10 +10,6 @@
 package org.xxooooxx.nestledger.service.ledgerInvite.implementations;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.mongodb.core.MongoTemplate;
-import org.springframework.data.mongodb.core.query.Criteria;
-import org.springframework.data.mongodb.core.query.Query;
-import org.springframework.data.mongodb.core.query.Update;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.xxooooxx.nestledger.dao.ledger.interfaces.LedgerDao;
@@ -26,11 +22,9 @@ import org.xxooooxx.nestledger.to.LedgerDB;
 import org.xxooooxx.nestledger.to.LedgerInviteDB;
 import org.xxooooxx.nestledger.to.UserInfoDB;
 import org.xxooooxx.nestledger.utility.UserContext;
-import org.xxooooxx.nestledger.vo.ledger.request.LedgerUpdateRequestData;
 import org.xxooooxx.nestledger.vo.ledgerInvite.request.LedgerInviteCreateRequestData;
 import org.xxooooxx.nestledger.vo.ledgerInvite.request.LedgerInviteGetRequestData;
 import org.xxooooxx.nestledger.vo.ledgerInvite.response.LedgerInviteGetResponseData;
-import org.xxooooxx.nestledger.vo.userinfo.request.UserInfoUpdateRequestData;
 
 import java.util.List;
 
@@ -45,9 +39,6 @@ public class LedgerInviteServiceDao implements LedgerInviteService {
 
     @Autowired
     private UserInfoDao userInfoDao;
-
-    @Autowired
-    private MongoTemplate mongoTemplate;
 
     @Override
     public LedgerInviteGetResponseData createLedgerInvite(LedgerInviteCreateRequestData data) {
