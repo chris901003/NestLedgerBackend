@@ -96,19 +96,9 @@ public class LedgerInviteServiceDao implements LedgerInviteService {
                 throw new CustomException(CustomExceptionEnum.UNAUTHORIZED_ACCEPT_LEDGER_INVITE);
             }
             // Update ledger
-            LedgerDB ledgerDB = ledgerDao.getLedger(ledgerInviteDB.getLedgerId());
-            if (ledgerDB == null) {
-                throw new CustomException(CustomExceptionEnum.LEDGER_NOT_FOUND);
-            }
-            LedgerUpdateRequestData ledgerUpdateRequestData = new LedgerUpdateRequestData();
-            ledgerUpdateRequestData.set_id(ledgerDB.get_id());
-            ledgerUpdateRequestData.setUserIds(ledgerDB.getUserIds());
-            ledgerUpdateRequestData.getUserIds().add(ledgerInviteDB.getReceiveUserId());
-            try {
-                ledgerDao.updateLedger(ledgerUpdateRequestData, false);
-            } catch (IllegalAccessException e) {
-                throw new CustomException(CustomExceptionEnum.FAILED_TO_DELETE_LEDGER_INVITE_UPDATE_LEDGER);
-            }
+            LedgerDB ledgerDB = ledgerDao.ledgerUserJoin(
+                    ledgerInviteDB.getReceiveUserId(), ledgerInviteDB.getLedgerId()
+            );
 
             // Update receiver user info
             UserInfoDB userInfoDB = userInfoDao.userJoinLedger(

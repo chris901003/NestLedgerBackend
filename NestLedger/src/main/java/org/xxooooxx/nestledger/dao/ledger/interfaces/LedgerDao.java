@@ -21,4 +21,6 @@ public interface LedgerDao {
     void deleteLedger(String ledgerId);
     void incrementTotalIncome(String ledgerId, Integer amount);
     void incrementTotalExpense(String ledgerId, Integer amount);
+    LedgerDB ledgerUserJoin(String uid, String ledgerId);
+    LedgerDB ledgerUserLeave(String uid, String ledgerId);
 }

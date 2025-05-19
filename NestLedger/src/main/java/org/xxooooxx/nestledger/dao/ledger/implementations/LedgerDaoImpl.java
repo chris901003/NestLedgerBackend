@@ -125,4 +125,20 @@ public class LedgerDaoImpl implements LedgerDao {
             throw new CustomException(CustomExceptionEnum.LEDGER_NOT_FOUND);
         }
     }
+
+    @Override
+    public LedgerDB ledgerUserJoin(String uid, String ledgerId) {
+        Query query = new Query(Criteria.where("_id").is(ledgerId));
+        Update update = new Update().addToSet("userIds", uid);
+        FindAndModifyOptions options = new FindAndModifyOptions().returnNew(true).upsert(false);
+        return mongoTemplate.findAndModify(query, update, options, LedgerDB.class);
+    }
+
+    @Override
+    public LedgerDB ledgerUserLeave(String uid, String ledgerId) {
+        Query query = new Query(Criteria.where("_id").is(ledgerId));
+        Update update = new Update().pull("userIds", uid);
+        FindAndModifyOptions options = new FindAndModifyOptions().returnNew(true).upsert(false);
+        return mongoTemplate.findAndModify(query, update, options, LedgerDB.class);
+    }
 }
