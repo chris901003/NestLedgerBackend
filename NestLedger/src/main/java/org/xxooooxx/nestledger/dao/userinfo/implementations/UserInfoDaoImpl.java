@@ -81,6 +81,22 @@ public class UserInfoDaoImpl implements UserInfoDao {
     }
 
     @Override
+    public UserInfoDB userJoinLedger(String uid, String ledgerId) {
+        Query query = new Query(Criteria.where("id").is(uid));
+        Update update = new Update().addToSet("ledgerIds", ledgerId);
+        FindAndModifyOptions options = new FindAndModifyOptions().returnNew(true).upsert(false);
+        return mongoTemplate.findAndModify(query, update, options, UserInfoDB.class);
+    }
+
+    @Override
+    public UserInfoDB userLeaveLedger(String uid, String ledgerId) {
+        Query query = new Query(Criteria.where("id").is(uid));
+        Update update = new Update().pull("ledgerIds", ledgerId);
+        FindAndModifyOptions options = new FindAndModifyOptions().returnNew(true).upsert(false);
+        return mongoTemplate.findAndModify(query, update, options, UserInfoDB.class);
+    }
+
+    @Override
     public UserInfoDB deleteUserInfo(String id) {
         Query query = new Query(Criteria.where("id").is(id));
         UserInfoDB userInfoDB = mongoTemplate.findOne(query, UserInfoDB.class);

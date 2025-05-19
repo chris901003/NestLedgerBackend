@@ -10,6 +10,10 @@
 package org.xxooooxx.nestledger.service.ledgerInvite.implementations;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.mongodb.core.MongoTemplate;
+import org.springframework.data.mongodb.core.query.Criteria;
+import org.springframework.data.mongodb.core.query.Query;
+import org.springframework.data.mongodb.core.query.Update;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.xxooooxx.nestledger.dao.ledger.interfaces.LedgerDao;
@@ -41,6 +45,9 @@ public class LedgerInviteServiceDao implements LedgerInviteService {
 
     @Autowired
     private UserInfoDao userInfoDao;
+
+    @Autowired
+    private MongoTemplate mongoTemplate;
 
     @Override
     public LedgerInviteGetResponseData createLedgerInvite(LedgerInviteCreateRequestData data) {
@@ -104,23 +111,9 @@ public class LedgerInviteServiceDao implements LedgerInviteService {
             }
 
             // Update receiver user info
-            UserInfoDB userInfoDB = userInfoDao.getUserInfoById(ledgerInviteDB.getReceiveUserId());
-            if (userInfoDB == null) {
-                throw new CustomException(CustomExceptionEnum.USER_INFO_NOT_FOUND);
-            }
-            if (userInfoDB.getIsDelete()) {
-                throw new CustomException(CustomExceptionEnum.USER_INFO_HAS_BEEN_DELETED);
-            }
-            UserInfoUpdateRequestData userInfoUpdateRequestData = new UserInfoUpdateRequestData();
-            userInfoUpdateRequestData.setId(ledgerInviteDB.getReceiveUserId());
-            userInfoUpdateRequestData.setLedgerIds(userInfoDB.getLedgerIds());
-            userInfoUpdateRequestData.getLedgerIds().add(ledgerDB.get_id());
-            try {
-                System.out.println("Ledgers: " + userInfoUpdateRequestData.getLedgerIds());
-                userInfoDao.updateUserInfo(userInfoUpdateRequestData);
-            } catch (IllegalAccessException e) {
-                throw new CustomException(CustomExceptionEnum.FAILED_TO_DELETE_LEDGER_INVITE_UPDATE_USER);
-            }
+            UserInfoDB userInfoDB = userInfoDao.userJoinLedger(
+                    ledgerInviteDB.getReceiveUserId(), ledgerInviteDB.getLedgerId()
+            );
         }
     }
 }
