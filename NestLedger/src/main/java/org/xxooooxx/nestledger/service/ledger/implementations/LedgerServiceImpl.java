@@ -15,6 +15,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.xxooooxx.nestledger.dao.ledger.interfaces.LedgerDao;
 import org.xxooooxx.nestledger.dao.tag.interfaces.TagDao;
 import org.xxooooxx.nestledger.dao.transaction.interfaces.TransactionDao;
+import org.xxooooxx.nestledger.dao.userinfo.interfaces.UserInfoDao;
 import org.xxooooxx.nestledger.service.ledger.interfaces.LedgerService;
 import org.xxooooxx.nestledger.to.LedgerDB;
 import org.xxooooxx.nestledger.vo.ledger.request.LedgerCreateRequestData;
@@ -33,9 +34,14 @@ public class LedgerServiceImpl implements LedgerService {
     @Autowired
     private TransactionDao transactionDao;
 
+    @Autowired
+    private UserInfoDao userInfoDao;
+
     @Override
+    @Transactional
     public LedgerGetResponseData createLedger(LedgerCreateRequestData createData) {
         LedgerDB ledgerDB = ledgerDao.createLedger(createData);
+        userInfoDao.userJoinLedger(createData.getUserId(), ledgerDB.get_id());
         return new LedgerGetResponseData(ledgerDB);
     }
 
