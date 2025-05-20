@@ -58,4 +58,9 @@ public class LedgerInviteDaoImpl implements LedgerInviteDao {
         Query query = new Query(Criteria.where("_id").is(inviteId));
         mongoTemplate.remove(query, LedgerInviteDB.class);
     }
+
+    public void deleteLedgerInviteByLedgerId(String ledgerId) {
+        Query query = new Query(Criteria.where("ledgerId").is(ledgerId));
+        mongoTemplate.remove(query, LedgerInviteDB.class);
+    }
 }

@@ -13,6 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.xxooooxx.nestledger.dao.ledger.interfaces.LedgerDao;
+import org.xxooooxx.nestledger.dao.ledgerInvite.interfaces.LedgerInviteDao;
 import org.xxooooxx.nestledger.dao.tag.interfaces.TagDao;
 import org.xxooooxx.nestledger.dao.transaction.interfaces.TransactionDao;
 import org.xxooooxx.nestledger.dao.userinfo.interfaces.UserInfoDao;
@@ -40,6 +41,9 @@ public class LedgerServiceImpl implements LedgerService {
 
     @Autowired
     private UserInfoDao userInfoDao;
+
+    @Autowired
+    private LedgerInviteDao ledgerInviteDao;
 
     @Override
     @Transactional
@@ -87,6 +91,14 @@ public class LedgerServiceImpl implements LedgerService {
     @Override
     @Transactional
     public void deleteLedger(String ledgerId) {
+        LedgerDB ledgerDB = ledgerDao.getLedger(ledgerId);
+        if (ledgerDB == null) {
+            throw new CustomException(CustomExceptionEnum.LEDGER_NOT_FOUND);
+        }
+        for (String userId: ledgerDB.getUserIds()) {
+            userInfoDao.userLeaveLedger(userId, ledgerId);
+        }
+        ledgerInviteDao.deleteLedgerInviteByLedgerId(ledgerId);
         tagDao.deleteTagsByLedgerId(ledgerId);
         transactionDao.deleteTransactionsByLedgerId(ledgerId);
         ledgerDao.deleteLedger(ledgerId);

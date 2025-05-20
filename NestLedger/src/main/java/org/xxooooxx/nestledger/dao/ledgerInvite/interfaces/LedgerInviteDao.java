@@ -11,4 +11,5 @@ public interface LedgerInviteDao {
     LedgerInviteDB getLedgerInviteById(String inviteId);
     List<LedgerInviteDB> getLedgerInvite(LedgerInviteGetRequestData data);
     void deleteLedgerInvite(String inviteId);
+    void deleteLedgerInviteByLedgerId(String ledgerId);
 }
