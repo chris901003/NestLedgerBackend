@@ -80,6 +80,9 @@ public class TagServiceImpl implements TagService {
         if (tagDB == null) {
             throw new CustomException(CustomExceptionEnum.TAG_NOT_FOUND);
         }
+        if (tagDB.getUsingCount() > 0) {
+            throw new CustomException(CustomExceptionEnum.TAG_STILL_IN_USE);
+        }
         checkOperationValid(tagDB.getLedgerId());
         tagDao.deleteTag(tagId);
     }
