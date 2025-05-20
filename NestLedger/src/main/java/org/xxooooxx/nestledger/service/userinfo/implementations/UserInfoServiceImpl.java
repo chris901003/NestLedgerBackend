@@ -42,7 +42,7 @@ public class UserInfoServiceImpl implements UserInfoService {
 
     @Transactional
     @Override
-    public UserInfoGetResponse createUserInfoIfNeeded(String id) throws IllegalAccessException {
+    public UserInfoGetResponse createUserInfoIfNeeded(String id) {
         try {
             UserInfoDB existingUserInfo = userInfoDao.getUserInfoById(id);
             log.info("User info already exists: {}", id);

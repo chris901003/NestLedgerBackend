@@ -28,7 +28,6 @@ import org.xxooooxx.nestledger.vo.userinfo.request.UserInfoUpdateRequestData;
 import org.xxooooxx.nestledger.vo.userinfo.response.UserInfoGetResponse;
 
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.List;
 import java.util.Map;
@@ -41,7 +40,7 @@ public class UserInfoAPIController {
     private UserInfoService userInfoService;
 
     @GetMapping("/login")
-    public Response<UserInfoGetResponse> login() throws IllegalAccessException {
+    public Response<UserInfoGetResponse> login() {
         String uid = UserContext.getUid();
         return Response.success(userInfoService.createUserInfoIfNeeded(uid));
     }
