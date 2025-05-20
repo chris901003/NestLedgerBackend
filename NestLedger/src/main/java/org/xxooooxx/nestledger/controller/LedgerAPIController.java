@@ -59,4 +59,11 @@ public class LedgerAPIController {
         ledgerService.deleteLedger(ledgerId);
         return Response.success(null);
     }
+
+    @GetMapping("/leave")
+    public Response<LedgerGetResponseData> leaveLedger(
+            @RequestParam String uid, @RequestParam String ledgerId
+    ) {
+        return Response.success(ledgerService.leaveLedger(uid, ledgerId));
+    }
 }

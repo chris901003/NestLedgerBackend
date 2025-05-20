@@ -16,8 +16,12 @@ import org.xxooooxx.nestledger.dao.ledger.interfaces.LedgerDao;
 import org.xxooooxx.nestledger.dao.tag.interfaces.TagDao;
 import org.xxooooxx.nestledger.dao.transaction.interfaces.TransactionDao;
 import org.xxooooxx.nestledger.dao.userinfo.interfaces.UserInfoDao;
+import org.xxooooxx.nestledger.exception.CustomException;
+import org.xxooooxx.nestledger.exception.CustomExceptionEnum;
 import org.xxooooxx.nestledger.service.ledger.interfaces.LedgerService;
 import org.xxooooxx.nestledger.to.LedgerDB;
+import org.xxooooxx.nestledger.to.UserInfoDB;
+import org.xxooooxx.nestledger.utility.UserContext;
 import org.xxooooxx.nestledger.vo.ledger.request.LedgerCreateRequestData;
 import org.xxooooxx.nestledger.vo.ledger.request.LedgerUpdateRequestData;
 import org.xxooooxx.nestledger.vo.ledger.response.LedgerGetResponseData;
@@ -55,6 +59,29 @@ public class LedgerServiceImpl implements LedgerService {
     public LedgerGetResponseData updateLedger(LedgerUpdateRequestData updateData) throws IllegalAccessException {
         LedgerDB ledgerDB = ledgerDao.updateLedger(updateData, true);
         return new LedgerGetResponseData(ledgerDB);
+    }
+
+    @Override
+    @Transactional
+    public LedgerGetResponseData leaveLedger(String uid, String ledgerId) {
+        LedgerDB ledgerDB = ledgerDao.getLedger(ledgerId);
+        if (ledgerDB == null) {
+            throw new CustomException(CustomExceptionEnum.LEDGER_NOT_FOUND);
+        }
+        String currentUserId = UserContext.getUid();
+        if (!ledgerDB.getUserIds().contains(currentUserId)) {
+            throw new CustomException(CustomExceptionEnum.UNAUTHORIZED_OPERATION_LEDGER);
+        }
+        if (ledgerDB.getTitle().startsWith("[Main]")) {
+            throw new CustomException(CustomExceptionEnum.INVALID_DELETE_MAIN_LEDGER);
+        }
+        if (ledgerDB.getUserIds().size() == 1) {
+            deleteLedger(ledgerId);
+            return null;
+        }
+        LedgerDB newLedgerDB = ledgerDao.ledgerUserLeave(uid, ledgerId);
+        UserInfoDB userInfoDB = userInfoDao.userLeaveLedger(uid, ledgerId);
+        return new LedgerGetResponseData(newLedgerDB);
     }
 
     @Override

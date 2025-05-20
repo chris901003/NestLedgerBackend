@@ -17,5 +17,6 @@ public interface LedgerService {
     LedgerGetResponseData createLedger(LedgerCreateRequestData createData);
     LedgerGetResponseData getLedger(String ledgerId);
     LedgerGetResponseData updateLedger(LedgerUpdateRequestData updateData) throws IllegalAccessException;
+    LedgerGetResponseData leaveLedger(String uid, String ledgerId);
     void deleteLedger(String ledgerId);
 }

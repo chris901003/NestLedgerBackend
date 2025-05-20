@@ -23,6 +23,7 @@ public enum CustomExceptionEnum {
     UNAUTHORIZED_UPDATE_LEDGER(3004, "Unauthorized update ledger"),
     UNAUTHORIZED_DELETE_LEDGER(3005, "Unauthorized delete ledger"),
     INVALID_DELETE_MAIN_LEDGER(3006, "Invalid delete main ledger"),
+    UNAUTHORIZED_OPERATION_LEDGER(3007, "Unauthorized operation ledger"),
 
     // Transaction
     TRANSACTION_NOT_FOUND(4001, "Transaction not found"),
