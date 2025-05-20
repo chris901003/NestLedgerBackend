@@ -27,8 +27,6 @@ import org.xxooooxx.nestledger.utility.UserContext;
 import org.xxooooxx.nestledger.vo.ledger.request.LedgerCreateRequestData;
 import org.xxooooxx.nestledger.vo.ledger.request.LedgerUpdateRequestData;
 
-import java.lang.reflect.Field;
-import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Objects;
 
@@ -95,13 +93,6 @@ public class LedgerDaoImpl implements LedgerDao {
         LedgerDB ledgerDB = getLedger(ledgerId);
         if (ledgerDB == null) {
             throw new CustomException(CustomExceptionEnum.LEDGER_NOT_FOUND);
-        }
-        String uid = UserContext.getUid();
-        if (!ledgerDB.getUserIds().contains(uid)) {
-            throw new CustomException(CustomExceptionEnum.UNAUTHORIZED_DELETE_LEDGER);
-        }
-        if (ledgerDB.getTitle().startsWith("[Main]")) {
-            throw new CustomException(CustomExceptionEnum.INVALID_DELETE_MAIN_LEDGER);
         }
         mongoTemplate.remove(ledgerDB);
     }

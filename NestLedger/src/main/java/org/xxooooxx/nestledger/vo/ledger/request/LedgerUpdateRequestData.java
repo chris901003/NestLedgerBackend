@@ -22,7 +22,5 @@ public class LedgerUpdateRequestData {
 
     private String title;
     private List<String> userIds;
-    private Integer totalIncome;
-    private Integer totalExpense;
     private Integer version;
 }

@@ -92,8 +92,13 @@ public class LedgerServiceImpl implements LedgerService {
     @Transactional
     public void deleteLedger(String ledgerId) {
         LedgerDB ledgerDB = ledgerDao.getLedger(ledgerId);
+        String uid = UserContext.getUid();
         if (ledgerDB == null) {
             throw new CustomException(CustomExceptionEnum.LEDGER_NOT_FOUND);
+        } else if (!ledgerDB.getUserIds().contains(uid)) {
+            throw new CustomException(CustomExceptionEnum.UNAUTHORIZED_DELETE_LEDGER);
+        } else if (ledgerDB.getTitle().startsWith("[Main]")) {
+            throw new CustomException(CustomExceptionEnum.INVALID_DELETE_MAIN_LEDGER);
         }
         for (String userId: ledgerDB.getUserIds()) {
             userInfoDao.userLeaveLedger(userId, ledgerId);
