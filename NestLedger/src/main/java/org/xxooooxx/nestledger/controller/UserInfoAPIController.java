@@ -107,7 +107,6 @@ public class UserInfoAPIController {
         if (!userInfoGetResponse.getAvatar().isBlank()) {
             path = userInfoGetResponse.getAvatar();
         }
-        System.out.println(path);
 
         // Check if the file exists
         java.io.File file = new java.io.File(path);

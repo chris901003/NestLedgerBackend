@@ -25,7 +25,5 @@ public class UserInfoUpdateRequestData {
     private String avatar;
     private Integer timeZone;
     private Double imageQuality;
-    private ArrayList<String> ledgerIds;
-    private Boolean isDelete;
     private Integer version;
 }
