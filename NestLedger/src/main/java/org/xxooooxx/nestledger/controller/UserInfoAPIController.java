@@ -93,28 +93,34 @@ public class UserInfoAPIController {
     }
 
     @PostMapping("/upload-avatar")
-    public Response<Long> uploadAvatar(@RequestParam("avatar") MultipartFile file) throws IOException {
+    public Response<UserInfoGetResponse> uploadAvatar(
+            @RequestParam("avatar") MultipartFile file
+    ) throws IOException, IllegalAccessException {
         String uid = UserContext.getUid();
         return Response.success(userInfoService.uploadAvatar(uid, file));
     }
 
     @GetMapping("/avatar")
     public ResponseEntity<InputStreamResource> getAvatar(@RequestParam(value = "uid") String uid) throws IOException {
-        String filePath = "C:\\Users\\ediet\\Documents\\Codes\\NestLedgerDB\\files\\" + uid + "\\";
-        String fileName = uid + ".jpg";
+        String path = "C:\\Users\\ediet\\Documents\\Codes\\NestLedgerDB\\files\\avatar.jpg";
+        UserInfoGetResponse userInfoGetResponse = userInfoService.getUserInfoById(uid);
+        if (!userInfoGetResponse.getAvatar().isBlank()) {
+            path = userInfoGetResponse.getAvatar();
+        }
+        System.out.println(path);
 
         // Check if the file exists
-        java.io.File file = new java.io.File(filePath + fileName);
+        java.io.File file = new java.io.File(path);
         if (!file.exists()) {
             throw new CustomException(CustomExceptionEnum.USER_AVATAR_NOT_FOUND);
         }
 
-        FileInputStream inputStream = new FileInputStream(filePath + fileName);
+        FileInputStream inputStream = new FileInputStream(path);
         InputStreamResource resource = new InputStreamResource(inputStream);
         return ResponseEntity.ok()
                 .contentType(MediaType.APPLICATION_OCTET_STREAM)
                 .contentLength(inputStream.available())
-                .header("Content-Disposition", "attachment; filename=\"" + fileName + "\"")
+                .header("Content-Disposition", "attachment; filename=\"" + path + "\"")
                 .body(resource);
     }
 }

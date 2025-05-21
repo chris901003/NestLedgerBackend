@@ -24,5 +24,5 @@ public interface UserInfoService {
     UserInfoGetResponse getUserInfoByEmail(String email);
     UserInfoGetResponse updateUserInfo(UserInfoUpdateRequestData data) throws IllegalAccessException;
     UserInfoGetResponse deleteUserInfo(String id);
-    Long uploadAvatar(String id, MultipartFile file) throws IOException;
+    UserInfoGetResponse uploadAvatar(String id, MultipartFile file) throws IOException, IllegalAccessException;
 }

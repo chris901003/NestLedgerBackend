@@ -99,7 +99,7 @@ public class UserInfoServiceImpl implements UserInfoService {
     }
 
     @Override
-    public Long uploadAvatar(String id, MultipartFile file) throws IOException {
+    public UserInfoGetResponse uploadAvatar(String id, MultipartFile file) throws IOException, IllegalAccessException {
         String filePath = "C:\\Users\\ediet\\Documents\\Codes\\NestLedgerDB\\files\\" + id + "\\";
         String fileName = id + ".jpg";
 
@@ -109,7 +109,12 @@ public class UserInfoServiceImpl implements UserInfoService {
             boolean isCreated = folder.mkdirs();
         }
         file.transferTo(new File(filePath + fileName));
-        return file.getSize();
+
+        UserInfoUpdateRequestData data = new UserInfoUpdateRequestData();
+        data.setId(id);
+        data.setAvatar(filePath + fileName);
+        UserInfoDB userInfoDB = userInfoDao.updateUserInfo(data);
+        return new UserInfoGetResponse(userInfoDB);
     }
 
     private UserInfoDB createUserInfo(String id) {
