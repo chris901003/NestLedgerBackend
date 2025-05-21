@@ -8,6 +8,7 @@ import jakarta.servlet.http.HttpServletResponse;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.HandlerInterceptor;
+import org.xxooooxx.nestledger.exception.AuthenticationException;
 import org.xxooooxx.nestledger.exception.CustomException;
 import org.xxooooxx.nestledger.exception.CustomExceptionEnum;
 import org.xxooooxx.nestledger.utility.UserContext;
@@ -18,7 +19,7 @@ import java.util.Set;
 @Component
 public class FirebaseAuthenticationInterceptor implements HandlerInterceptor {
 
-    private static final Set<String> whitelist = Set.of("/", "/error", "/v1/information/basic");
+    private static final Set<String> whitelist = Set.of("/", "/error", "/v1/information/basic", "/apis");
 
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
@@ -35,10 +36,10 @@ public class FirebaseAuthenticationInterceptor implements HandlerInterceptor {
                 log.info("User ID: {} authenticated successfully.", uid);
                 return true;
             } catch (FirebaseAuthException e) {
-                throw new CustomException(CustomExceptionEnum.ACCOUNT_AUTHENTICATION_FAILED);
+                throw new AuthenticationException(403, "Invalid token");
             }
         } else {
-            throw new CustomException(CustomExceptionEnum.ACCOUNT_AUTHENTICATION_FAILED);
+            throw new AuthenticationException(403, "Invalid token");
         }
     }
 

@@ -1,11 +1,13 @@
 package org.xxooooxx.nestledger.advice;
 
+import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.xxooooxx.nestledger.common.Response;
+import org.xxooooxx.nestledger.exception.AuthenticationException;
 import org.xxooooxx.nestledger.exception.CustomException;
 
 import java.util.HashMap;
@@ -28,6 +30,11 @@ public class GlobalExceptionHandler {
             errors.put(field, message);
         }
         return Response.error(400, "Validation failed", errors);
+    }
+
+    @ExceptionHandler
+    public ResponseEntity<Response<?>> handleAuthenticationException(AuthenticationException e) {
+        return ResponseEntity.status(403).body(Response.error(e.getCode(), e.getMessage(), null));
     }
 
     @ExceptionHandler(Exception.class)

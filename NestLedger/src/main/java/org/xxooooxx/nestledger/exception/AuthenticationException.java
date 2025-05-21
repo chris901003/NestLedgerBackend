@@ -9,5 +9,18 @@
  */
 package org.xxooooxx.nestledger.exception;
 
-public class AuthenticationException {
+import lombok.Getter;
+
+public class AuthenticationException extends RuntimeException {
+    @Getter
+    final private Integer code;
+
+    @Getter
+    final private String message;
+
+    public AuthenticationException(final Integer code, final String message) {
+        super(message);
+        this.code = code;
+        this.message = message;
+    }
 }
