@@ -9,10 +9,12 @@
  */
 package org.xxooooxx.nestledger.vo.tag.request;
 
+import jakarta.validation.constraints.NotBlank;
 import lombok.Data;
 
 @Data
 public class TagQueryRequestData {
+    @NotBlank
     private String ledgerId;
     private String search;
     private String tagId;

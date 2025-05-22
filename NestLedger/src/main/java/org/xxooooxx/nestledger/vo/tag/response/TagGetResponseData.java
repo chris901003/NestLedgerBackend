@@ -14,7 +14,7 @@ import org.xxooooxx.nestledger.to.TagDB;
 
 @Data
 public class TagGetResponseData {
-    private String id;
+    private String _id;
     private String label;
     private String color;
     private String ledgerId;
@@ -22,7 +22,7 @@ public class TagGetResponseData {
     private Integer version;
 
     public TagGetResponseData(TagDB data) {
-        this.id = data.get_id();
+        this._id = data.get_id();
         this.label = data.getLabel();
         this.color = data.getColor();
         this.ledgerId = data.getLedgerId();
