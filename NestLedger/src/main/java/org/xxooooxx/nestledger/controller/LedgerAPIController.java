@@ -41,9 +41,10 @@ public class LedgerAPIController {
     public Response<LedgerGetResponseData> getLedger(@RequestParam String ledgerId) {
         String uid = UserContext.getUid();
         LedgerGetResponseData response = ledgerService.getLedger(ledgerId);
-        if (!response.getUserIds().contains(uid)) {
-            throw new CustomException(CustomExceptionEnum.UNAUTHORIZED_GET_LEDGER);
-        }
+        // 暫時關閉
+//        if (!response.getUserIds().contains(uid)) {
+//            throw new CustomException(CustomExceptionEnum.UNAUTHORIZED_GET_LEDGER);
+//        }
         return Response.success(ledgerService.getLedger(ledgerId));
     }
 
