@@ -93,6 +93,12 @@ public class UserInfoServiceImpl implements UserInfoService {
     }
 
     @Override
+    public UserInfoGetResponse changeQuickLogLedger(String uid, String ledgerId) {
+        UserInfoDB userInfoDB = userInfoDao.changeQuickLogLedger(uid, ledgerId);
+        return new UserInfoGetResponse(userInfoDB);
+    }
+
+    @Override
     public UserInfoGetResponse deleteUserInfo(String id) {
         UserInfoDB userInfoDB = userInfoDao.deleteUserInfo(id);
         return new UserInfoGetResponse(userInfoDB);

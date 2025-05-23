@@ -82,6 +82,12 @@ public class UserInfoAPIController {
         return Response.success(userInfoService.updateUserInfo(data));
     }
 
+    @PatchMapping("/change-quick-log-ledger")
+    public Response<UserInfoGetResponse> changeQuickLogLedger(@RequestParam String ledgerId) {
+        String uid = UserContext.getUid();
+        return Response.success(userInfoService.changeQuickLogLedger(uid, ledgerId));
+    }
+
     @Transactional
     @DeleteMapping("/delete")
     public Response<UserInfoGetResponse> deleteUserInfo() throws FirebaseAuthException {

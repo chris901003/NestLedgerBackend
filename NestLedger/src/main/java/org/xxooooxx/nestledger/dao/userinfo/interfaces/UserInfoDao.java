@@ -28,6 +28,8 @@ public interface UserInfoDao {
 
     UserInfoDB updateUserInfo(UserInfoUpdateRequestData data) throws IllegalAccessException;
 
+    UserInfoDB changeQuickLogLedger(String uid, String ledgerId);
+
     UserInfoDB userJoinLedger(String uid, String ledgerId);
 
     UserInfoDB userLeaveLedger(String uid, String ledgerId);

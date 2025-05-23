@@ -21,7 +21,7 @@ import org.xxooooxx.nestledger.to.UserInfoDB;
 import org.xxooooxx.nestledger.utility.MongoDbUpdateUtility;
 import org.xxooooxx.nestledger.vo.userinfo.request.UserInfoUpdateRequestData;
 
-import java.lang.reflect.Field;
+import java.util.Collections;
 import java.util.List;
 
 
@@ -78,6 +78,25 @@ public class UserInfoDaoImpl implements UserInfoDao {
             return mongoTemplate.findAndModify(query, update, options, UserInfoDB.class);
         }
         return null;
+    }
+
+    @Override
+    public UserInfoDB changeQuickLogLedger(String uid, String ledgerId) {
+        Query query = new Query(Criteria.where("id").is(uid));
+        UserInfoDB userInfoDB = mongoTemplate.findOne(query, UserInfoDB.class);
+        if (userInfoDB == null) {
+            throw new CustomException(CustomExceptionEnum.USER_INFO_NOT_FOUND);
+        }
+        int index = userInfoDB.getLedgerIds().indexOf(ledgerId);
+        if (index != -1) {
+            Collections.swap(userInfoDB.getLedgerIds(), 0, index);
+            Query updateQuery = new Query(Criteria.where("id").is(uid));
+            Update update = new Update().set("ledgerIds", userInfoDB.getLedgerIds());
+            FindAndModifyOptions options = new FindAndModifyOptions().returnNew(true).upsert(false);
+            return mongoTemplate.findAndModify(updateQuery, update, options, UserInfoDB.class);
+        } else {
+            throw new CustomException(CustomExceptionEnum.LEDGER_NOT_FOUND);
+        }
     }
 
     @Override

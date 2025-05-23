@@ -23,6 +23,7 @@ public interface UserInfoService {
     List<UserInfoGetResponse> getMultipleUserInfoById(List<String> ids);
     UserInfoGetResponse getUserInfoByEmail(String email);
     UserInfoGetResponse updateUserInfo(UserInfoUpdateRequestData data) throws IllegalAccessException;
+    UserInfoGetResponse changeQuickLogLedger(String uid, String ledgerId);
     UserInfoGetResponse deleteUserInfo(String id);
     UserInfoGetResponse uploadAvatar(String id, MultipartFile file) throws IOException, IllegalAccessException;
 }
