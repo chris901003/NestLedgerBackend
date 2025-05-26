@@ -33,3 +33,4 @@ build/
 .vscode/
 
 FirebaseAccountKey.json
+application.properties
