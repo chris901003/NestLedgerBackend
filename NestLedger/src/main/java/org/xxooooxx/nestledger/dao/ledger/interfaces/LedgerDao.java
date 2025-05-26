@@ -23,4 +23,6 @@ public interface LedgerDao {
     void incrementTotalExpense(String ledgerId, Integer amount);
     LedgerDB ledgerUserJoin(String uid, String ledgerId);
     LedgerDB ledgerUserLeave(String uid, String ledgerId);
+    LedgerDB ledgerAddInviteUser(String uid, String ledgerId);
+    LedgerDB ledgerRemoveInviteUser(String uid, String ledgerId);
 }

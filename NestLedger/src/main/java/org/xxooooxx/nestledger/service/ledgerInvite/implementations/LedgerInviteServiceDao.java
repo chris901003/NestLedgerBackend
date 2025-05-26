@@ -41,6 +41,7 @@ public class LedgerInviteServiceDao implements LedgerInviteService {
     private UserInfoDao userInfoDao;
 
     @Override
+    @Transactional
     public LedgerInviteGetResponseData createLedgerInvite(LedgerInviteCreateRequestData data) {
         LedgerDB ledgerDB = ledgerDao.getLedger(data.getLedgerId());
         UserInfoDB userInfoDB = userInfoDao.getUserInfoById(data.getReceiveUserId());
@@ -60,6 +61,7 @@ public class LedgerInviteServiceDao implements LedgerInviteService {
             throw new CustomException(CustomExceptionEnum.USER_INFO_HAS_BEEN_DELETED);
         }
         LedgerInviteDB ledgerInviteDB = ledgerInviteDao.createLedgerInvite(data);
+        ledgerDao.ledgerAddInviteUser(data.getReceiveUserId(), data.getLedgerId());
         return new LedgerInviteGetResponseData(ledgerInviteDB);
     }
 
@@ -82,6 +84,7 @@ public class LedgerInviteServiceDao implements LedgerInviteService {
 
         String uid = UserContext.getUid();
         ledgerInviteDao.deleteLedgerInvite(inviteId);
+        ledgerDao.ledgerRemoveInviteUser(uid, ledgerInviteDB.getLedgerId());
         if (accept) {
             if (!ledgerInviteDB.getReceiveUserId().equals(uid)) {
                 throw new CustomException(CustomExceptionEnum.UNAUTHORIZED_ACCEPT_LEDGER_INVITE);

@@ -27,6 +27,8 @@ public class LedgerDB {
 
     private ArrayList<String> userIds = new ArrayList<>();
 
+    private ArrayList<String> invitingUserIds = new ArrayList<>();
+
     private Integer totalIncome = 0;
 
     private Integer totalExpense = 0;

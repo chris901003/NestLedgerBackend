@@ -132,4 +132,20 @@ public class LedgerDaoImpl implements LedgerDao {
         FindAndModifyOptions options = new FindAndModifyOptions().returnNew(true).upsert(false);
         return mongoTemplate.findAndModify(query, update, options, LedgerDB.class);
     }
+
+    @Override
+    public LedgerDB ledgerAddInviteUser(String uid, String ledgerId) {
+        Query query = new Query(Criteria.where("_id").is(ledgerId));
+        Update update = new Update().addToSet("invitingUserIds", uid);
+        FindAndModifyOptions options = new FindAndModifyOptions().returnNew(true).upsert(false);
+        return mongoTemplate.findAndModify(query, update, options, LedgerDB.class);
+    }
+
+    @Override
+    public LedgerDB ledgerRemoveInviteUser(String uid, String ledgerId) {
+        Query query = new Query(Criteria.where("_id").is(ledgerId));
+        Update update = new Update().pull("invitingUserIds", uid);
+        FindAndModifyOptions options = new FindAndModifyOptions().returnNew(true).upsert(false);
+        return mongoTemplate.findAndModify(query, update, options, LedgerDB.class);
+    }
 }
