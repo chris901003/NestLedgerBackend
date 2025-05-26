@@ -19,7 +19,9 @@ import java.util.Set;
 @Component
 public class FirebaseAuthenticationInterceptor implements HandlerInterceptor {
 
-    private static final Set<String> whitelist = Set.of("/", "/error", "/v1/information/basic", "/apis");
+    private static final Set<String> whitelist = Set.of(
+            "/", "/error", "/v1/information/basic", "/apis", "/v1/user/verify-email"
+    );
 
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {

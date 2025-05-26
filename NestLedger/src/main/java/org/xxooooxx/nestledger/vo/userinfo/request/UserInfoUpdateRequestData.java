@@ -20,8 +20,6 @@ public class UserInfoUpdateRequestData {
     @NotBlank(message = "Id 不可為空白")
     private String id;
     private String userName;
-    @Email(message = "電子郵件格式錯誤")
-    private String emailAddress;
     private String avatar;
     private Integer timeZone;
     private Double imageQuality;

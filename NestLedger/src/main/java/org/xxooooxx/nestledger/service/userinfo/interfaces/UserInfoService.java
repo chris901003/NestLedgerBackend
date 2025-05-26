@@ -14,7 +14,6 @@ import org.xxooooxx.nestledger.vo.userinfo.request.UserInfoUpdateRequestData;
 import org.xxooooxx.nestledger.vo.userinfo.response.UserInfoGetResponse;
 
 import java.io.IOException;
-import java.math.BigDecimal;
 import java.util.List;
 
 public interface UserInfoService {
@@ -26,4 +25,5 @@ public interface UserInfoService {
     UserInfoGetResponse changeQuickLogLedger(String uid, String ledgerId);
     UserInfoGetResponse deleteUserInfo(String id);
     UserInfoGetResponse uploadAvatar(String id, MultipartFile file) throws IOException, IllegalAccessException;
+    boolean updateUserEmail(String token);
 }

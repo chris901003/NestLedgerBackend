@@ -16,6 +16,7 @@ import java.util.List;
 
 public interface EmailVerificationDao {
     EmailVerificationDB getEmailVerificationByUid(String uid);
+    EmailVerificationDB getEmailVerificationByToken(String token);
     void updateEmailVerification(
             String uid, String token, String emailAddress, Date expireAt, List<Date> verificationHistory
     );

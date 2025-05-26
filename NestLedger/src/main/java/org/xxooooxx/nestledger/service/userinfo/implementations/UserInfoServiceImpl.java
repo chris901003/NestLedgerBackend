@@ -14,11 +14,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
+import org.xxooooxx.nestledger.dao.emailVerification.interfaces.EmailVerificationDao;
 import org.xxooooxx.nestledger.dao.ledger.interfaces.LedgerDao;
 import org.xxooooxx.nestledger.dao.userinfo.interfaces.UserInfoDao;
 import org.xxooooxx.nestledger.exception.CustomException;
 import org.xxooooxx.nestledger.exception.CustomExceptionEnum;
 import org.xxooooxx.nestledger.service.userinfo.interfaces.UserInfoService;
+import org.xxooooxx.nestledger.to.EmailVerificationDB;
 import org.xxooooxx.nestledger.to.LedgerDB;
 import org.xxooooxx.nestledger.to.UserInfoDB;
 import org.xxooooxx.nestledger.vo.ledger.request.LedgerCreateRequestData;
@@ -27,7 +29,6 @@ import org.xxooooxx.nestledger.vo.userinfo.response.UserInfoGetResponse;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.List;
 
 @Slf4j
@@ -39,6 +40,9 @@ public class UserInfoServiceImpl implements UserInfoService {
 
     @Autowired
     private LedgerDao ledgerDao;
+
+    @Autowired
+    private EmailVerificationDao emailVerificationDao;
 
     @Transactional
     @Override
@@ -124,6 +128,14 @@ public class UserInfoServiceImpl implements UserInfoService {
         data.setAvatar(filePath + fileName);
         UserInfoDB userInfoDB = userInfoDao.updateUserInfo(data);
         return new UserInfoGetResponse(userInfoDB);
+    }
+
+    @Override
+    public boolean updateUserEmail(String token) {
+        EmailVerificationDB emailVerificationDB = emailVerificationDao.getEmailVerificationByToken(token);
+        if (emailVerificationDB == null) return false;
+        userInfoDao.updateUserEmail(emailVerificationDB.getUid(), emailVerificationDB.getEmailAddress());
+        return true;
     }
 
     private UserInfoDB createUserInfo(String id) {

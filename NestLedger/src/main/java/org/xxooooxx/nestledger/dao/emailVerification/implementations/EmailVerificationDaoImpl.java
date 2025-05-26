@@ -42,6 +42,13 @@ public class EmailVerificationDaoImpl implements EmailVerificationDao {
     }
 
     @Override
+    public EmailVerificationDB getEmailVerificationByToken(String token) {
+        return mongoTemplate.findOne(
+                Query.query(Criteria.where("token").is(token)), EmailVerificationDB.class
+        );
+    }
+
+    @Override
     public void updateEmailVerification(
             String uid, String token, String emailAddress, Date expireAt, List<Date> verificationHistory
     ) {

@@ -19,6 +19,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.servlet.ModelAndView;
 import org.xxooooxx.nestledger.common.Response;
 import org.xxooooxx.nestledger.exception.CustomException;
 import org.xxooooxx.nestledger.exception.CustomExceptionEnum;
@@ -127,5 +128,14 @@ public class UserInfoAPIController {
                 .contentLength(inputStream.available())
                 .header("Content-Disposition", "attachment; filename=\"" + path + "\"")
                 .body(resource);
+    }
+
+    @GetMapping("/verify-email")
+    public ModelAndView verifyEmail(@RequestParam String token) {
+        if (userInfoService.updateUserEmail(token)) {
+            return new ModelAndView("verify-success");
+        } else {
+            return new ModelAndView("verify-failed");
+        }
     }
 }

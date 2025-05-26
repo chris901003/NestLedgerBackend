@@ -77,6 +77,13 @@ public class UserInfoDaoImpl implements UserInfoDao {
     }
 
     @Override
+    public void updateUserEmail(String id, String email) {
+        Query query = new Query(Criteria.where("id").is(id));
+        Update update = new Update().set("emailAddress", email);
+        mongoTemplate.updateFirst(query, update, UserInfoDB.class);
+    }
+
+    @Override
     public UserInfoDB changeQuickLogLedger(String uid, String ledgerId) {
         Query query = new Query(Criteria.where("id").is(uid));
         UserInfoDB userInfoDB = mongoTemplate.findOne(query, UserInfoDB.class);

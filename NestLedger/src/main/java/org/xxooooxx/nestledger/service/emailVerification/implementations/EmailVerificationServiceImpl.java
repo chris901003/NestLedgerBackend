@@ -80,7 +80,7 @@ public class EmailVerificationServiceImpl implements EmailVerificationService {
         MimeMessage message = mailSender.createMimeMessage();
         MimeMessageHelper helper = new MimeMessageHelper(message, true, "UTF-8");
 
-        String verificationLink = "https://https://nlbackendmain.xxooooxx.org:1172/v1/user/verify-email?token=" + token;
+        String verificationLink = "https://nlbackendmain.xxooooxx.org:1172/v1/user/verify-email?token=" + token;
 
         helper.setTo(address);
         helper.setSubject("請驗證您的電子郵件地址 - 共同記帳 (NestLedger)");
