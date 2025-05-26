@@ -48,13 +48,9 @@ public class UserInfoDaoImpl implements UserInfoDao {
 
     @Override
     public UserInfoDB getUserInfoByEmail(String email) {
-        UserInfoDB userInfoDB = mongoTemplate.findOne(
+        return mongoTemplate.findOne(
                 new Query(Criteria.where("emailAddress").is(email)), UserInfoDB.class
         );
-        if (userInfoDB == null) {
-            throw new CustomException(CustomExceptionEnum.USER_INFO_NOT_FOUND);
-        }
-        return userInfoDB;
     }
 
     @Override

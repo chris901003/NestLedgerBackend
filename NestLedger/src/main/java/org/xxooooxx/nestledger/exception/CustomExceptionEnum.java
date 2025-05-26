@@ -15,6 +15,9 @@ public enum CustomExceptionEnum {
     UNAUTHORIZED_UPDATE_USER_INFO(2002, "Unauthorized update user info"),
     USER_AVATAR_NOT_FOUND(2003, "User avatar not found"),
     USER_INFO_HAS_BEEN_DELETED(2004, "User info has been deleted"),
+    EMAIL_ALREADY_EXISTS(2005, "Email already exists"),
+    EMAIL_VERIFICATION_LIMIT_EXCEEDED(2006, "Email verification limit exceeded"),
+    SEND_EMAIL_VERIFICATION_FAILED(2007, "Send email verification failed"),
 
     // Ledger
     LEDGER_NOT_FOUND(3001, "Ledger not found"),

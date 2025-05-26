@@ -80,6 +80,9 @@ public class UserInfoServiceImpl implements UserInfoService {
     @Override
     public UserInfoGetResponse getUserInfoByEmail(String email) {
         UserInfoDB userInfoDB = userInfoDao.getUserInfoByEmail(email);
+        if (userInfoDB == null) {
+            throw new CustomException(CustomExceptionEnum.USER_INFO_NOT_FOUND);
+        }
         return new UserInfoGetResponse(userInfoDB);
     }
 
