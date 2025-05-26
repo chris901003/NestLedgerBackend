@@ -84,7 +84,6 @@ public class LedgerInviteServiceDao implements LedgerInviteService {
 
         String uid = UserContext.getUid();
         ledgerInviteDao.deleteLedgerInvite(inviteId);
-        ledgerDao.ledgerRemoveInviteUser(uid, ledgerInviteDB.getLedgerId());
         if (accept) {
             if (!ledgerInviteDB.getReceiveUserId().equals(uid)) {
                 throw new CustomException(CustomExceptionEnum.UNAUTHORIZED_ACCEPT_LEDGER_INVITE);
@@ -99,5 +98,8 @@ public class LedgerInviteServiceDao implements LedgerInviteService {
                     ledgerInviteDB.getReceiveUserId(), ledgerInviteDB.getLedgerId()
             );
         }
+        LedgerDB newLedgerDB = ledgerDao.ledgerRemoveInviteUser(
+                ledgerInviteDB.getReceiveUserId(), ledgerInviteDB.getLedgerId()
+        );
     }
 }

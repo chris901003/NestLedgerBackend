@@ -56,12 +56,16 @@ public class LedgerServiceImpl implements LedgerService {
     @Override
     public LedgerGetResponseData getLedger(String ledgerId) {
         LedgerDB ledgerDB = ledgerDao.getLedger(ledgerId);
+        String uid = UserContext.getUid();
+        if (!ledgerDB.getUserIds().contains(uid) && !ledgerDB.getInvitingUserIds().contains(uid)) {
+            throw new CustomException(CustomExceptionEnum.UNAUTHORIZED_GET_LEDGER);
+        }
         return new LedgerGetResponseData(ledgerDB);
     }
 
     @Override
     public LedgerGetResponseData updateLedger(LedgerUpdateRequestData updateData) throws IllegalAccessException {
-        LedgerDB ledgerDB = ledgerDao.updateLedger(updateData, true);
+        LedgerDB ledgerDB = ledgerDao.updateLedger(updateData);
         return new LedgerGetResponseData(ledgerDB);
     }
 
