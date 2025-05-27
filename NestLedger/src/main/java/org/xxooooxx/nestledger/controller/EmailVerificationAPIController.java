@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.xxooooxx.nestledger.common.Response;
 import org.xxooooxx.nestledger.service.emailVerification.interfaces.EmailVerificationService;
-import org.xxooooxx.nestledger.utility.UserContext;
+import org.xxooooxx.nestledger.vo.emailVerification.response.EmailVerificationGetResponseData;
 
 @RestController
 @RequestMapping("/v1/email-verification")
@@ -24,6 +24,11 @@ public class EmailVerificationAPIController {
 
     @Autowired
     private EmailVerificationService emailVerificationService;
+
+    @GetMapping("/get")
+    public Response<EmailVerificationGetResponseData> getEmailVerification() {
+        return Response.success(emailVerificationService.getEmailVerification());
+    }
 
     @GetMapping("/send")
     public Response<?> sendEmailVerification(@Parameter String emailAddress) {

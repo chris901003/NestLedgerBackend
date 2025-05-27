@@ -25,6 +25,7 @@ import org.xxooooxx.nestledger.to.EmailVerificationDB;
 import org.xxooooxx.nestledger.to.UserInfoDB;
 import org.xxooooxx.nestledger.utility.TokenGenerator;
 import org.xxooooxx.nestledger.utility.UserContext;
+import org.xxooooxx.nestledger.vo.emailVerification.response.EmailVerificationGetResponseData;
 
 import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
@@ -43,6 +44,16 @@ public class EmailVerificationServiceImpl implements EmailVerificationService {
 
     @Autowired
     private JavaMailSender mailSender;
+
+    @Override
+    public EmailVerificationGetResponseData getEmailVerification() {
+        String uid = UserContext.getUid();
+        EmailVerificationDB emailVerificationDB = emailVerificationDao.getEmailVerificationByUid(uid);
+        if (emailVerificationDB == null) {
+            return null;
+        }
+        return new EmailVerificationGetResponseData(emailVerificationDB);
+    }
 
     @Override
     @Transactional
